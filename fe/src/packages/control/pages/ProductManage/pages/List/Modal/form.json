@@ -28,7 +28,7 @@
       ]
     },
     {
-      "key": "isBaseSubProduct",
+      "key": "isBaseApp",
       "widget": "switch",
       "label": "是否为base子项目",
       "initialValue": false,
@@ -104,7 +104,7 @@
       "key": "envList",
       "type": "array",
       "label": "环境列表",
-      "hidden": "{{formData.isBaseSubProduct}}",
+      "hidden": "{{formData.isBaseApp}}",
       "items": {
         "type": "object",
 
@@ -136,7 +136,7 @@
       "key": "devOptions",
       "type": "object",
       "label": "开发配置",
-      "hidden": "{{formData.isBaseSubProduct}}",
+      "hidden": "{{formData.isBaseApp}}",
       "initialValue": {
         "microAppOptions": {
           "shadowDOM": false,

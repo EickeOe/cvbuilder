@@ -1,39 +1,38 @@
-import { Button, Card, PageHeader, Popconfirm, Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useCallback, useEffect, useRef, useState } from "react";
-import "./index.less";
-import XTableRender from "@/components/XTableRender/XTableRender";
-import { useAsync, useAsyncFn } from "react-use";
-import { getSearchParams, usePersistFn } from "@gcer/react-air";
-import { modal } from "./Modal/Modal";
-import { fetchRoleListApi, fetchRoleUserListApi } from "developer/apis";
-import { useRecoilValue } from "recoil";
-import { currentManageProductState } from "@/packages/developer/recoil";
+import { Button, Card, PageHeader, Popconfirm, Space } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import XTableRender from '@/components/XTableRender/XTableRender'
+import { useAsync, useAsyncFn } from 'react-use'
+import { getSearchParams, usePersistFn } from '@gcer/react-air'
+import { modal } from './Modal/Modal'
+import { fetchRoleListApi, fetchRoleUserListApi } from 'developer/apis'
+import { useRecoilValue } from 'recoil'
+import { currentManageProductState } from '@/packages/developer/recoil'
 
 export default function AuthManage() {
-  const currentManageProduct = useRecoilValue(currentManageProductState);
+  const currentManageProduct = useRecoilValue(currentManageProductState)
   const xTableRef = useRef<any>({
     reset() {},
     onQuery(..._: any) {},
     refresh() {},
     setList(..._: any) {},
-    getCurrentList: () => [],
-  });
+    getCurrentList: () => []
+  })
 
   const { value: roleList = [] } = useAsync(() => {
-    const { key } = getSearchParams(location.search);
+    const { key } = getSearchParams(location.search)
     return fetchRoleListApi(key).then((list: any) =>
       list.map((item: any) => ({ value: item.roleId, label: item.roleName }))
-    );
-  }, []);
+    )
+  }, [])
   const api = useCallback(async (p) => {
-    const { key } = getSearchParams(location.search);
+    const { key } = getSearchParams(location.search)
     return fetchRoleUserListApi(p.roleId, key).then((res: any) => {
       return {
-        list: res,
-      };
-    });
-  }, []);
+        list: res
+      }
+    })
+  }, [])
 
   const onEdit = usePersistFn((doc) => {
     // modal({
@@ -44,48 +43,41 @@ export default function AuthManage() {
     //     xTableRef.current.refresh()
     //   }
     // } as any)
-  });
+  })
 
   const columnsRef = useRef([
     {
-      title: "姓名",
-      dataIndex: "name",
-      key: "name",
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name'
     },
 
     {
-      title: "角色",
-      key: "appId",
-      dataIndex: "appId",
-    },
-  ]);
+      title: '角色',
+      key: 'appId',
+      dataIndex: 'appId'
+    }
+  ])
 
   const onNewBtnClick = useCallback(() => {
     modal({
       data: {},
       onOk() {
-        xTableRef.current.refresh();
-      },
-    } as any);
-  }, []);
+        xTableRef.current.refresh()
+      }
+    } as any)
+  }, [])
 
   return (
     <>
-      <PageHeader
-        ghost={false}
-        title={`${currentManageProduct?.label}-权限管理`}
-      />
+      <PageHeader ghost={false} title={`${currentManageProduct?.label}-权限管理`} />
       <Card bordered={false}>
         <XTableRender
           api={api}
           ref={xTableRef}
           extra={
             <>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={onNewBtnClick}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={onNewBtnClick}>
                 新增
               </Button>
             </>
@@ -93,27 +85,27 @@ export default function AuthManage() {
           noFirstFetch
           xFormRender={{
             form: {
-              type: "object",
-              layout: "inline",
+              type: 'object',
+              layout: 'inline',
               properties: {
                 roleId: {
-                  label: "角色",
-                  widget: "select",
-                  placeholder: "请选择角色",
+                  label: '角色',
+                  widget: 'select',
+                  placeholder: '请选择角色',
                   widgetProps: {
                     style: {
-                      width: "150px",
-                    },
+                      width: '150px'
+                    }
                   },
-                  options: roleList,
-                },
-              },
-            },
+                  options: roleList
+                }
+              }
+            }
           }}
           columns={columnsRef.current as any}
           rowKey={(row: any) => `${row.id}`}
         />
       </Card>
     </>
-  );
+  )
 }

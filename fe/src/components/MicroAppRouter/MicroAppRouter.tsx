@@ -126,7 +126,7 @@ export default function MicroAppRouter() {
   return (
     <>
       {microAppList
-        .filter((app) => !app.isBaseSubProduct)
+        .filter((app) => !app.isBaseApp)
         .map((app) => {
           const devOptions = app.devOptions
           let main = `${domain}/cloudFront/${app.key}/${env}`

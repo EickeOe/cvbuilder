@@ -62,7 +62,7 @@ export default function BasicHeader({}: Props) {
                 <span className={className.item}>
                   {hasEnv ? (
                     <DevelopSelect />
-                  ) : currentProduct.isBaseSubProduct ? (
+                  ) : currentProduct.isBaseApp ? (
                     ''
                   ) : (
                     <Link to={`/developer/product/detail?key=${currentProduct.key}`}>配置环境</Link>

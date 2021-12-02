@@ -6,7 +6,7 @@ import GraphQLJSON from 'graphql-type-json'
 export class MenuConfig {
   @Field((type) => GraphQLJSON, { nullable: true })
   menus: { [key: string]: any }
-  @Field()
+  @Field({ nullable: true })
   enabled: boolean
 }
 
@@ -25,6 +25,9 @@ export class MicroAppOptions {
 export class DevOptions {
   @Field((type) => MicroAppOptions, { nullable: true })
   microAppOptions: MicroAppOptions
+
+  @Field({ nullable: true })
+  main: string
 }
 
 @ObjectType('app', { description: 'app' })

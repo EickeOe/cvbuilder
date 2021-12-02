@@ -37,7 +37,7 @@ export class AppService {
     if (!app) {
       throw new NotFoundException(app)
     }
-    await this.repository.update(app, { ...app, ...input })
+    await this.repository.update({ key: app.key }, { ...app, ...input })
 
     return { ...app, ...input }
   }

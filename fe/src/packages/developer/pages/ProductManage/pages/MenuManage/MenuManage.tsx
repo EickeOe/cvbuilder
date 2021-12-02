@@ -1,6 +1,6 @@
 import CodeEditor from '@/components/CodeEditor/CodeEditor'
 import XFormRender from '@/components/NXFormRender/XFormRender'
-import { fetchProductListApi, putAppApi } from '@/packages/developer/apis'
+import { fetchAppApi, putAppApi } from '@/packages/developer/apis'
 import { currentManageProductState } from '@/packages/developer/recoil'
 import { getSearchParams } from '@gcer/react-air'
 import { Button, Card, notification, PageHeader } from 'antd'
@@ -15,13 +15,7 @@ export default function MenuManage() {
   const currentManageProduct = useRecoilValue(currentManageProductState)
   const { value: detail } = useAsync(async () => {
     const { key } = getSearchParams(location.search)
-    return fetchProductListApi({
-      pageNum: 1,
-      pageSize: 1,
-      appCode: key
-    }).then((res: any) => {
-      return res.data[0]
-    })
+    return fetchAppApi(key)
   }, [])
 
   useEffect(() => {

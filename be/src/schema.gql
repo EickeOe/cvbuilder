@@ -3,10 +3,12 @@
 # ------------------------------------------------------
 
 type DevOptions {
+  main: String
   microAppOptions: MicroAppOptions
 }
 
 input DevOptionsInput {
+  main: String
   microAppOptions: MicroAppOptionsInput
 }
 
@@ -21,12 +23,12 @@ input LoginInput {
 }
 
 type MenuConfig {
-  enabled: Boolean!
+  enabled: Boolean
   menus: JSON
 }
 
 input MenuConfigInput {
-  enabled: Boolean!
+  enabled: Boolean
   menus: JSON
 }
 

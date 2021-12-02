@@ -1,6 +1,6 @@
 import XFormRender from '@/components/NXFormRender/XFormRender'
 import XDrawer from '@/components/XDrawer/Drawer'
-import { postProductApi, putAppApi } from '@/packages/developer/apis'
+import { postAppApi, putAppApi } from '@/packages/developer/apis'
 import { createFuncModal } from '@gcer/react-air'
 import { Button, notification } from 'antd'
 import { useEffect, useMemo, useRef } from 'react'
@@ -47,9 +47,8 @@ export default function Modal({ visible, data, close, onOk }: Props) {
 
   const [{ loading }, ok] = useAsyncFn(async () => {
     const values = await formRef.current.validate()
-
     if (isNew) {
-      await postProductApi(values)
+      await postAppApi(values)
     } else {
       await putAppApi(values)
     }

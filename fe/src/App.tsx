@@ -18,8 +18,6 @@ export default function App() {
     ;(async () => {
       let [userInfo, productList]: any = await Promise.all([fetchUserInfoApi(), fetchAppsApi({ disabled: false })])
 
-      console.log(productList)
-
       setUserInfoState(userInfo)
       // const isGlobalAdmin = userInfo?.roles?.some((role: any) => role.roleCode === 'cloud')
       // const isSomeProductAdmin = userInfo?.roles?.length > 0

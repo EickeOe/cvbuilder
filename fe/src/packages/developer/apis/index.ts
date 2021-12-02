@@ -1,13 +1,38 @@
 import { gql } from 'graphql-request'
 import http, { gqlApi } from './api'
 
-export const fetchProductListApi = (params: { pageNum: number; pageSize: number; appCode?: string }) =>
-  http.post('/app/list', params).then((res) => {
-    res.data = res.data
-      .map((obj: any) => JSON.parse(obj.menuConfig || '{}'))
-      .filter((obj: Object) => Object.keys(obj).length > 1)
-    return res
-  })
+export const fetchAppApi = (key: string) =>
+  gqlApi
+    .request(
+      gql`
+        query app($key: String!) {
+          app(key: $key) {
+            label
+            key
+            path
+            isBaseApp
+            disabled
+            devOptions {
+              microAppOptions {
+                shadowDOM
+                disableSandbox
+                inline
+              }
+            }
+            menuConfig {
+              enabled
+              menus
+            }
+            icon
+            classification
+          }
+        }
+      `,
+      {
+        key
+      }
+    )
+    .then((res) => res.app)
 
 export const fetchAppsApi = (query: {
   disabled?: boolean
@@ -46,7 +71,19 @@ export const fetchAppsApi = (query: {
     )
     .then((res: any) => res.apps)
 
-export const postProductApi = (params: {}) => http.post('/app/create', params)
+export const postAppApi = (app: MicroApp) =>
+  gqlApi.request(
+    gql`
+      mutation createApp($app: NewAppInput!) {
+        createApp(app: $app) {
+          key
+        }
+      }
+    `,
+    {
+      app
+    }
+  )
 
 export const deleteProductApi = (params: { code: string }) =>
   http.post('/app/delete', params, {

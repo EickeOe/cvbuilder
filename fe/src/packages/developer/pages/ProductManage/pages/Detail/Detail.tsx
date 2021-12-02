@@ -1,5 +1,5 @@
 import XFormRender from '@/components/NXFormRender/XFormRender'
-import { fetchProductListApi, putAppApi } from '@/packages/developer/apis'
+import { fetchAppApi, putAppApi } from '@/packages/developer/apis'
 import { currentManageProductState } from '@/packages/developer/recoil'
 import { getSearchParams } from '@gcer/react-air'
 import { Button, Card, notification, PageHeader } from 'antd'
@@ -15,22 +15,15 @@ export default function Detail() {
   const [detail, setCurrentManageProductState] = useRecoilState(currentManageProductState)
   useAsync(async () => {
     const { key } = getSearchParams(location.search)
-    return fetchProductListApi({
-      pageNum: 1,
-      pageSize: 1,
-      appCode: key
+    return fetchAppApi(key).then((data) => {
+      setCurrentManageProductState(data)
+      return data
     })
-      .then((res: any) => {
-        return res.data[0]
-      })
-      .then((data) => {
-        setCurrentManageProductState(data)
-        return data
-      })
   }, [])
 
   useEffect(() => {
     if (detail) {
+      console.log(detail)
       formRef.current.setFieldsValue(JSON.parse(JSON.stringify(detail)))
     }
   }, [detail])
