@@ -1,0 +1,66 @@
+.right {
+  width: 720px;
+  @apply flex;
+  @apply flex-col;
+  @apply max-h-full;
+  @apply overflow-auto;
+  padding: 0 16px;
+  padding-top: 16px;
+
+  .col {
+    columns: 200px 3;
+    column-gap: 12px;
+  }
+  .lastAccessWrap,
+  .toolbar {
+    margin-bottom: 24px;
+  }
+  .search {
+    :global {
+      .ant-input-affix-wrapper {
+        border: none;
+        border-bottom: 1px solid #d9d9d9;
+        border-radius: 0;
+        box-shadow: none;
+        &.ant-input-affix-wrapper-focused {
+          .ant-input-prefix {
+            color: theme('textColor.link');
+          }
+        }
+      }
+    }
+  }
+}
+.menusDrawer {
+  @apply flex;
+  height: 100%;
+  font-size: 12px;
+  color: theme('textColor.default');
+}
+.title {
+  margin: 0px 0px 4px;
+  padding: 0px 8px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 250ms linear 0s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result {
+  padding: 0 8px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 32px;
+  position: relative;
+  transition: all 300ms ease-in-out 0s;
+  margin-bottom: 0;
+  margin: 0px 0px 4px;
+  height: 32px;
+  font-size: 12px;
+}

@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "column": 1,
+  "labelLayout": {
+    "type": "horizontal",
+    "width": "100px"
+  },
+  "properties": [
+    {
+      "key": "0",
+      "widget": "UserSelect",
+      "label": "P0",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "1",
+      "widget": "UserSelect",
+      "label": "P1",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "2",
+      "widget": "UserSelect",
+      "label": "P2",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "3",
+      "widget": "UserSelect",
+      "label": "P3",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    }
+  ]
+}

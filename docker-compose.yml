@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  alpine:
+    image: alpine
+    container_name: PostgresData
+    volumes:
+      - ./database:/var/lib/postgresql/data
+  databases:
+    image: postgres
+    container_name: databases
+    environment:
+      POSTGRES_PASSWORD: eick
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  # cache:
+  #   image: redis
+  #   container_name: cache
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - CacheData:/var/lib/redis/data
+  #     - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  PostgresData:

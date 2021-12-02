@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "column": 1,
+  "labelLayout": {
+    "type": "horizontal",
+    "width": "150px"
+  },
+  "properties": [
+    {
+      "key": "enabled",
+      "widget": "switch",
+      "label": "启用主应用菜单",
+      "initialValue": false,
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "options": [
+        {
+          "label": "是",
+          "value": true
+        },
+        {
+          "label": "否",
+          "value": false
+        }
+      ]
+    },
+    {
+      "key": "menus",
+      "widget": "CodeEditor",
+      "label": "菜单json",
+      "widgetProps": {
+        "language": "json"
+      }
+    }
+  ]
+}

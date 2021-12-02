@@ -1,0 +1,245 @@
+{
+  "type": "object",
+  "column": 1,
+  "labelLayout": {
+    "type": "horizontal",
+    "width": "150px"
+  },
+  "properties": [
+    {
+      "key": "disabled",
+      "widget": "switch",
+      "label": "是否禁用",
+      "initialValue": false,
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "options": [
+        {
+          "label": "是",
+          "value": true
+        },
+        {
+          "label": "否",
+          "value": false
+        }
+      ]
+    },
+    {
+      "key": "isBaseSubProduct",
+      "widget": "switch",
+      "label": "是否为base子项目",
+      "initialValue": false,
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "options": [
+        {
+          "label": "是",
+          "value": true
+        },
+        {
+          "label": "否",
+          "value": false
+        }
+      ]
+    },
+
+    {
+      "key": "icon",
+      "widget": "input",
+      "label": "图标",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "label",
+      "widget": "input",
+      "label": "产品名称",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+
+    {
+      "key": "key",
+      "widget": "input",
+      "label": "key",
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "widgetProps": {
+        "disabled": true
+      }
+    },
+    {
+      "key": "path",
+      "widget": "input",
+      "label": "首页路径",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "classification",
+      "widget": "input",
+      "label": "产品分类",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+
+    {
+      "key": "envList",
+      "type": "array",
+      "label": "环境列表",
+      "hidden": "{{formData.isBaseSubProduct}}",
+      "items": {
+        "type": "object",
+
+        "properties": [
+          {
+            "key": "label",
+            "label": "环境名",
+            "widget": "input",
+            "widgetProps": {
+              "style": {
+                "width": "150px"
+              }
+            }
+          },
+          {
+            "key": "key",
+            "label": "key",
+            "widget": "input",
+            "widgetProps": {
+              "style": {
+                "width": "150px"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "devOptions",
+      "type": "object",
+      "label": "开发配置",
+      "hidden": "{{formData.isBaseSubProduct}}",
+      "initialValue": {
+        "microAppOptions": {
+          "shadowDOM": false,
+          "inline": false,
+          "disableSandbox": false
+        }
+      },
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "properties": [
+        {
+          "key": "main",
+          "label": "本地环境地址",
+          "widget": "input",
+          "rules": [
+            {
+              "required": true
+            }
+          ]
+        },
+        {
+          "key": "microAppOptions",
+          "type": "object",
+          "label": "微前端配置",
+          "rules": [
+            {
+              "required": true
+            }
+          ],
+          "properties": [
+            {
+              "key": "shadowDOM",
+              "widget": "radiogroup",
+              "label": "shadowDOM",
+              "initialValue": false,
+              "rules": [
+                {
+                  "required": true
+                }
+              ],
+              "options": [
+                {
+                  "label": "启用",
+                  "value": true
+                },
+                {
+                  "label": "关闭",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "key": "inline",
+              "widget": "radiogroup",
+              "label": "内联script",
+              "initialValue": false,
+              "rules": [
+                {
+                  "required": true
+                }
+              ],
+              "options": [
+                {
+                  "label": "启用",
+                  "value": true
+                },
+                {
+                  "label": "关闭",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "key": "disableSandbox",
+              "widget": "radiogroup",
+              "label": "js沙箱",
+              "initialValue": false,
+              "rules": [
+                {
+                  "required": true
+                }
+              ],
+              "options": [
+                {
+                  "label": "启用",
+                  "value": false
+                },
+                {
+                  "label": "关闭",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

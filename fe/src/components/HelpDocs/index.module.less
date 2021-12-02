@@ -1,0 +1,34 @@
+.title {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 16px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.more {
+  font-size: 14px;
+  @apply flex;
+  @apply cursor-pointer;
+  align-items: center;
+  gap: 4px;
+  color: theme('textColor.link');
+  margin: 8px 16px;
+}
+.helpDocs {
+  color: theme('textColor.default');
+  :global {
+    .ant-collapse-borderless {
+      background-color: transparent;
+    }
+  }
+}
+.quickQ {
+  font-size: 14px;
+  @apply flex;
+  @apply cursor-pointer;
+  align-items: center;
+  gap: 4px;
+  color: theme('textColor.link');
+  margin: 8px 16px;
+}

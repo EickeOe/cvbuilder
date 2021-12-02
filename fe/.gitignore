@@ -1,0 +1,5 @@
+dist
+node_module
+node_modules
+nginx
+docker-compose.yml

@@ -1,0 +1,47 @@
+.HelpDocsModalWrap {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+.HelpDocsModal {
+  position: absolute;
+  user-select: auto;
+  width: 420px;
+  height: 636px;
+  display: inline-block;
+  top: 0;
+  left: 0;
+  cursor: auto;
+  // transform: translate(100%, 100%);
+  max-width: 9.0072e15px;
+  max-height: 9.0072e15px;
+  min-width: 240px;
+  min-height: 400px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  box-shadow: rgb(0 0 0 / 21%) 0px 4px 16px 0px;
+  background-color: rgb(255, 255, 255);
+  // transition: all 0.3s ease-in 0s;
+}
+.header {
+  @apply flex;
+  @apply justify-between;
+  height: 22px;
+  line-height: 22px;
+  user-select: none;
+  background-color: theme('colors.gray.800');
+  color: theme('colors.gray.200');
+  .title {
+    padding-left: 8px;
+    @apply cursor-move;
+    @apply flex-1;
+  }
+  .close {
+    @apply cursor-pointer;
+    @apply flex;
+    align-items: center;
+    padding: 0 4px;
+  }
+}

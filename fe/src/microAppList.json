@@ -1,0 +1,93 @@
+[
+  {
+    "icon": "",
+    "main": "https://d1-ark.shizhuang-inc.net/",
+    "path": "/ark",
+    "label": "配置中心",
+    "key": "ARK_CONFIG_CENTER",
+    "classification": "",
+    "starred": true,
+    "devOptions": {
+      "port": "7777",
+      "buildMode": "cjs",
+      "key": "ark",
+      "microAppOptions": {
+        "shadowDOM": false,
+        "inline": false,
+        "disableSandbox": false
+      }
+    }
+  },
+  {
+    "icon": "",
+    "main": "http://dev.shizhuang-inc.net:3002/kirn/",
+    "path": "/kirn",
+    "label": "服务中心",
+    "key": "KIRN_SERVICE_CENTER",
+    "classification": "",
+    "starred": true,
+    "devOptions": {
+      "buildMode": "esm",
+      "key": "kirn",
+      "microAppOptions": {
+        "shadowDOM": false,
+        "inline": true,
+        "disableSandbox": true
+      }
+    }
+  },
+  {
+    "icon": "",
+    "main": "http://dev.shizhuang-inc.net:3002/kirn/",
+    "path": "/flowCtrl",
+    "label": "流控中心",
+    "key": "FLOW_CTRL_CENTER",
+    "classification": "",
+    "starred": false,
+    "devOptions": {
+      "buildMode": "esm",
+      "key": "kirn",
+      "microAppOptions": {
+        "shadowDOM": false,
+        "inline": true,
+        "disableSandbox": true
+      }
+    }
+  },
+  {
+    "icon": "",
+    "main": "http://dev.shizhuang-inc.net:8080/",
+    "path": "/bifrost",
+    "label": "彩虹桥DAL",
+    "key": "bifrost_CONFIG_CENTER",
+    "classification": "",
+    "starred": true,
+    "devOptions": {
+      "buildMode": "cjs",
+      "key": "bifrost",
+      "microAppOptions": {
+        "shadowDOM": false,
+        "inline": false,
+        "disableSandbox": false
+      }
+    }
+  },
+  {
+    "icon": "",
+    "main": "http://dev.shizhuang-inc.net:8081/",
+    "path": "/sms",
+    "label": "短信服务中心",
+    "key": "sms_CONFIG_CENTER",
+    "classification": "",
+    "starred": true,
+    "devOptions": {
+      "buildMode": "cjs",
+      "key": "sms",
+      "microAppOptions": {
+        "shadowDOM": false,
+        "inline": false,
+        "disableSandbox": false
+      }
+    }
+  }
+]

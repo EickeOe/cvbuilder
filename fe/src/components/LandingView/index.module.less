@@ -1,0 +1,264 @@
+.landingView {
+  width: 100%;
+  background-color: #f7f9fc;
+  padding: 20px;
+  min-height: 90vh;
+  min-width: 1200px;
+}
+
+.landingmyNav {
+  width: 100%;
+  min-height: 200px;
+  background-color: #fff;
+  box-shadow: 0;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.iconLately {
+  cursor: pointer;
+  vertical-align: top;
+  margin-top: -3px;
+  margin-left: 5px;
+  display: inline-block;
+}
+
+.landingViewItem {
+  width: 100%;
+  padding: 0 12px;
+  height: 32px;
+  line-height: 32px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 12px;
+  color: #313131;
+  .quickClosed {
+    position: absolute;
+    left: -8px;
+    top: -9px;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+  }
+  a {
+    color: #313131;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover {
+    background-color: #eff3fb;
+
+    .quickClosed {
+      opacity: 1;
+    }
+  }
+}
+
+.landingViewBadgeItem {
+  width: 100%;
+  position: relative;
+}
+
+.ladningBadag {
+  top: 4px;
+  height: 15px;
+  padding: 0 3px;
+  font-size: 12px;
+  color: #fff;
+  line-height: 14px;
+  right: -6px;
+}
+
+.addEntry {
+  .ant-menu-vertical > .ant-menu-item {
+    height: 30px;
+    line-height: 30px;
+  }
+}
+
+.iconStyle {
+  vertical-align: text-bottom;
+  display: inline-block;
+  margin-bottom: 1px;
+}
+
+.dropdownView {
+  width: 420px;
+  padding: 20px 0px;
+  background-color: #fff;
+  border: 1px solid #f1f1f1;
+  .ant-menu-vertical > .ant-menu-item {
+    height: 35px;
+    line-height: 35px;
+  }
+}
+
+.landingDropMenu {
+  height: 30px;
+  line-height: 30px;
+}
+
+.allProduct {
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  min-height: 200px;
+  margin-top: 20px;
+  border-radius: 6px;
+  .icon-lately {
+    cursor: pointer;
+    vertical-align: top;
+    margin-top: -3px;
+    margin-left: 5px;
+    display: inline-block;
+  }
+}
+
+.product-item {
+  cursor: pointer;
+}
+
+.product-img {
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  line-height: 70px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+.text > h3 {
+  font-weight: 400;
+  font-size: 16px;
+  color: #313131;
+  margin-top: 10px;
+  transition: all 0.3s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text > p {
+  font-size: 12px;
+  line-height: 18px;
+  color: #666666;
+  margin-top: 5px;
+}
+.img .anticon {
+  transition: all 0.2s;
+}
+.product-view-icon {
+  transition: all 0.2s;
+}
+
+.product-item:hover {
+  .product-view-icon {
+    transform: scale(1.2);
+  }
+  .text > h3 {
+    color: #22a7f0;
+  }
+}
+
+.all-product {
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  min-height: 200px;
+  margin-top: 20px;
+  border-radius: 6px;
+  .icon-lately {
+    cursor: pointer;
+    vertical-align: top;
+    margin-top: -3px;
+    margin-left: 5px;
+    display: inline-block;
+  }
+  .product-item {
+    cursor: pointer;
+    .img {
+      width: 70px;
+      height: 70px;
+      text-align: center;
+      line-height: 70px;
+      border-radius: 4px;
+      background-color: #f5f5f5;
+    }
+    .text > h3 {
+      font-weight: 400;
+      font-size: 16px;
+      color: #313131;
+      margin-top: 10px;
+      transition: all 0.3s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .text > p {
+      font-size: 12px;
+      line-height: 18px;
+      color: #666666;
+      margin-top: 5px;
+    }
+    .img .anticon {
+      transition: all 0.2s;
+    }
+    &:hover {
+      .img .anticon {
+        transform: scale(1.2);
+      }
+      .text > h3 {
+        color: #22a7f0;
+      }
+    }
+  }
+}
+
+.landing-swiper {
+  overflow: hidden;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.landing-swiper-item {
+  width: 100%;
+  height: 272px;
+  background-image: url('https://img.alicdn.com/imgextra/i3/O1CN01GeuB4C1iHkcvQc6mU_!!6000000004388-0-tps-2880-1070.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 65px 30px;
+  & > h2 {
+    font-size: 25px;
+    color: #313131;
+  }
+  & > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    font-size: 14px;
+    color: #181818;
+    line-height: 20px;
+    margin-bottom: 50px;
+  }
+}
+
+.landing-notice {
+  display: inline-block;
+  // height: 32px;
+  line-height: 32px;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #555;
+  transition: all 0.2s;
+  &:hover {
+    color: #22a7f0;
+  }
+  & > p {
+    margin-right: 12px;
+    color: #c1c1c1;
+  }
+}

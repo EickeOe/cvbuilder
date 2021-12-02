@@ -1,0 +1,48 @@
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Field, ID, InterfaceType, ObjectType } from '@nestjs/graphql';
+
+@ObjectType('app', { description: 'app' })
+@Entity({ name: 'app' })
+export class AppModel {
+  @Field((type) => ID)
+  @PrimaryColumn()
+  key: string;
+
+  @Field(() => Boolean)
+  @Column({ type: 'bool', nullable: false })
+  isBaseApp: boolean;
+  @Field()
+  @Column({ type: 'text', nullable: false })
+  label: string;
+
+  @Field()
+  @Column({ type: 'text', nullable: false })
+  path: string;
+
+  @Field()
+  @Column({ type: 'text', nullable: false })
+  classification: string;
+
+  @Field(() => Boolean)
+  @Column({ type: 'bool', default: true })
+  disabled: boolean;
+
+  @Field()
+  @Column({ type: 'text', nullable: true })
+  icon: string;
+
+  @Column({ type: 'json', nullable: true })
+  menuConfig: {
+    menus: {};
+    enabled: boolean;
+  };
+
+  @Column({ type: 'json', nullable: true })
+  devOptions: {
+    microAppOptions: {
+      shadowDOM: boolean;
+      inline: boolean;
+      disableSandbox: boolean;
+    };
+  };
+}

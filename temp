@@ -1,0 +1,18 @@
+res.header("Access-Control-Allow-Origin", "*");
+        res.header(
+          "Access-Control-Allow-Methods",
+          "PUT, GET, POST, DELETE, OPTIONS"
+        );
+        res.header(
+          "Access-Control-Allow-Headers",
+          "*"
+        );
+        res.header("Access-Control-Allow-Credentials", "true");
+        if (req.method == "OPTIONS") {
+          res.send(200);
+        } else {
+          next();
+        }
+
+        @nestjs/passport passport passport-local
+@types/passport-local

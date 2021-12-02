@@ -1,0 +1,55 @@
+.xFormRender {
+  .object {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .field {
+    display: flex;
+    align-items: center;
+    margin: 0 0 24px;
+    // &:first-child {
+    //   margin-top: 0;
+    // }
+    // &:last-child {
+    //   margin-bottom: 0;
+    // }
+    .horizontal {
+      flex-direction: row;
+    }
+    .vertical {
+      flex-direction: column;
+    }
+    .tooltip {
+      color: #00000073;
+      cursor: help;
+    }
+  }
+  .label {
+    &.required:before {
+      display: inline-block;
+      margin-right: 4px;
+      color: #ff4d4f;
+      font-size: 14px;
+      font-family: SimSun, sans-serif;
+      line-height: 1;
+      content: '*';
+    }
+    &:after {
+      content: ':';
+      position: relative;
+      top: -0.5px;
+      margin: 0 8px 0 2px;
+    }
+  }
+  .widgetWrap {
+    flex: 1;
+    position: relative;
+    .widget {
+      width: 100%;
+    }
+    .errorMessage {
+      position: absolute;
+      color: #ff4d4f;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@primary-color: #00c6c6;
+.menuBtn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background-color: @primary-color;
+  color: #fff;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  span {
+    display: block;
+    position: absolute;
+    left: 14px;
+    width: 20px;
+    height: 2px;
+    background: rgb(255, 255, 255);
+    transition: all 0.3s ease-out 0s;
+    &:first-child {
+      top: 17px;
+      transform-origin: left center;
+      transform: rotate(0deg);
+    }
+    &:nth-child(2) {
+      top: 24px;
+    }
+    &:nth-child(3) {
+      top: 31px;
+      transform-origin: left center;
+      transform: rotate(0deg);
+    }
+  }
+  &.open {
+    span {
+      &:first-child {
+        transform: rotate(45deg);
+      }
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "column": 1,
+  "labelLayout": {
+    "type": "horizontal",
+    "width": "150px"
+  },
+  "properties": [
+    {
+      "key": "name",
+      "widget": "input",
+      "label": "问题",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "content",
+      "widget": "textarea",
+      "label": "答案",
+      "rules": [
+        {
+          "required": true
+        }
+      ],
+      "widgetProps": {
+        "rows": 10
+      }
+    }
+  ]
+}

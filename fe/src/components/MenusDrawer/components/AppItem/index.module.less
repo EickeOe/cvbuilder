@@ -1,0 +1,39 @@
+.appItem {
+  color: theme('textColor.default');
+  user-select: none;
+  padding: 0 8px;
+  border-radius: 2px;
+  text-align: left;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 32px;
+  @apply cursor-pointer;
+  position: relative;
+  transition: all 300ms ease-in-out 0s;
+  @apply hover:bg-gray-100;
+  @apply flex;
+  align-items: center;
+  .label {
+    width: 100%;
+    @apply flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .star {
+    @apply flex;
+    align-items: center;
+    @apply opacity-0;
+    color: theme('textColor.link');
+    transition: all 300ms ease-in-out 0s;
+    &.starred {
+      @apply opacity-100;
+    }
+  }
+  &:hover {
+    .star {
+      @apply opacity-100;
+    }
+  }
+}

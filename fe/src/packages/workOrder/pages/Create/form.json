@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "column": 1,
+  "labelLayout": {
+    "type": "horizontal",
+    "width": "150px"
+  },
+  "properties": [
+    {
+      "key": "title",
+      "label": "标题",
+      "widget": "input",
+      "widgetProps": {
+        "maxLength": 50,
+        "placeholder": "标题输入限制50个字符"
+      },
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "product",
+      "label": "云产品",
+      "widget": "select",
+      "widgetProps": {
+        "style": {
+          "width": "100%"
+        },
+        "showSearch": true
+      },
+      "options": [
+        { "label": "ark平台", "value": "ark平台" },
+        { "label": "麒麟平台", "value": "麒麟平台" },
+        { "label": "流控平台", "value": "流控平台" }
+      ],
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "queation",
+      "label": "描述问题",
+      "widget": "textarea",
+      "widgetProps": {
+        "rows": 10
+      },
+      "value": "【需求场景】\n\n【改进建议】\n\n",
+      "rules": [
+        {
+          "required": true
+        }
+      ]
+    }
+  ]
+}

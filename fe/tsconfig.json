@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext", "ES2019.Object"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitThis": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "workOrder/*": ["src/packages/workOrder/*"],
+      "docsManage/*": ["src/packages/docsManage/*"],
+      "developer/*": ["src/packages/developer/*"],
+      "control/*": ["src/packages/control/*"]
+    }
+  },
+  "include": ["src"]
+}
