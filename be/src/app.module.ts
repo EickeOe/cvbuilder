@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { join, resolve } from 'path'
 import { AppModel } from './app/app.model'
-
 import { GraphQLModule } from '@nestjs/graphql'
 import { AppModule as AModule } from './app/app.module'
 import { PageInfoModel } from './model/page-info.model'

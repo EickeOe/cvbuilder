@@ -1,48 +1,66 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
-import { Field, ID, InterfaceType, ObjectType } from '@nestjs/graphql';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm'
+import { Field, ID, InterfaceType, ObjectType } from '@nestjs/graphql'
+import GraphQLJSON from 'graphql-type-json'
+
+@ObjectType()
+class MenuConfig {
+  @Field((type) => GraphQLJSON, { nullable: true })
+  menus: { [key: string]: any }
+  @Field()
+  enabled: boolean
+}
+
+@ObjectType()
+class MicroAppOptions {
+  @Field()
+  shadowDOM: boolean
+  @Field()
+  inline: boolean
+  @Field()
+  disableSandbox: boolean
+}
+
+@ObjectType()
+class DevOptions {
+  @Field((type) => MicroAppOptions, { nullable: true })
+  microAppOptions: MicroAppOptions
+}
 
 @ObjectType('app', { description: 'app' })
 @Entity({ name: 'app' })
 export class AppModel {
   @Field((type) => ID)
   @PrimaryColumn()
-  key: string;
+  key: string
 
   @Field(() => Boolean)
   @Column({ type: 'bool', nullable: false })
-  isBaseApp: boolean;
+  isBaseApp: boolean
   @Field()
   @Column({ type: 'text', nullable: false })
-  label: string;
+  label: string
 
   @Field()
   @Column({ type: 'text', nullable: false })
-  path: string;
+  path: string
 
   @Field()
   @Column({ type: 'text', nullable: false })
-  classification: string;
+  classification: string
 
   @Field(() => Boolean)
   @Column({ type: 'bool', default: true })
-  disabled: boolean;
+  disabled: boolean
 
   @Field()
   @Column({ type: 'text', nullable: true })
-  icon: string;
+  icon: string
 
-  @Column({ type: 'json', nullable: true })
-  menuConfig: {
-    menus: {};
-    enabled: boolean;
-  };
+  @Field(() => MenuConfig, { nullable: true })
+  @Column({ type: 'json', nullable: true, default: {} })
+  menuConfig: MenuConfig
 
-  @Column({ type: 'json', nullable: true })
-  devOptions: {
-    microAppOptions: {
-      shadowDOM: boolean;
-      inline: boolean;
-      disableSandbox: boolean;
-    };
-  };
+  @Field(() => DevOptions, { nullable: true })
+  @Column({ type: 'json', nullable: true, default: {} })
+  devOptions: DevOptions
 }

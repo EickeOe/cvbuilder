@@ -32,7 +32,7 @@ export default function MicroAppRouter() {
           const { devOptions } = app
           const arr = []
 
-          if (devOptions.microAppOptions?.inline) {
+          if (devOptions?.microAppOptions?.inline) {
             const key = app.key
             arr.push({
               loader(code: string, url: string) {
@@ -149,7 +149,7 @@ export default function MicroAppRouter() {
                   console.log(app)
                 }}
                 // destory
-                {...(devOptions.microAppOptions ?? {})}
+                {...(devOptions?.microAppOptions ?? {})}
               />
             </Route>
           )
