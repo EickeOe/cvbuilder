@@ -1,79 +1,54 @@
-import { Button, Card, PageHeader, Popconfirm, Space, Switch } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useCallback, useEffect, useRef, useState } from "react";
-import "./index.less";
-import XTableRender from "@/components/XTableRender/XTableRender";
-import { modal } from "./Modal/Modal";
-import { useAsyncFn } from "react-use";
-import { usePersistFn, useSearchParams } from "@gcer/react-air";
-import {
-  deleteProductApi,
-  fetchProductListApi,
-  putProductApi,
-} from "developer/apis";
-import { Link } from "react-router-dom";
-import { authModal } from "./AuthModal/AuthModal";
-import Icon from "@/components/Icon/Icon";
+import { Button, Card, PageHeader, Popconfirm, Space, Switch } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import './index.less'
+import XTableRender from '@/components/XTableRender/XTableRender'
+import { modal } from './Modal/Modal'
+import { useAsyncFn } from 'react-use'
+import { usePersistFn, useSearchParams } from '@gcer/react-air'
+import { deleteProductApi, fetchAppsApi, putProductApi } from 'developer/apis'
+import { Link } from 'react-router-dom'
+import { authModal } from './AuthModal/AuthModal'
+import Icon from '@/components/Icon/Icon'
 
-function Action({
-  onEdit,
-  onDel,
-  data,
-}: {
-  data: any;
-  onEdit(): void;
-  onDel(): void;
-}) {
+function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): void }) {
   const [{ loading }, del] = useAsyncFn(async () => {
-    await deleteProductApi({ code: data.key });
-    onDel();
-  }, []);
+    await deleteProductApi({ code: data.key })
+    onDel()
+  }, [])
   return (
     <>
       <Link to={`/developer/product/detail?key=${data.key}`}>
         <Button type="link">详情</Button>
       </Link>
-      <Popconfirm
-        title="确认删除?"
-        onConfirm={del}
-        okText="确定"
-        cancelText="取消"
-      >
+      <Popconfirm title="确认删除?" onConfirm={del} okText="确定" cancelText="取消">
         <Button loading={loading} type="link">
           删除
         </Button>
       </Popconfirm>
     </>
-  );
+  )
 }
 
-function DisSwitch({
-  product,
-  onChange,
-}: {
-  product: MicroApp;
-  onChange(value: boolean): void;
-}) {
+function DisSwitch({ product, onChange }: { product: MicroApp; onChange(value: boolean): void }) {
   const [{ loading }, submit] = useAsyncFn(
     async (disabled) => {
-      const values = product;
+      const values = product
       const params = {
         code: values.key,
         name: values.label,
         menuConfig: JSON.stringify({
           ...values,
-          disabled,
-        }),
-      };
+          disabled
+        })
+      }
 
-      await putProductApi(params);
-      onChange(disabled);
+      await putProductApi(params)
+      onChange(disabled)
     },
     [product]
-  );
-  return (
-    <Switch loading={loading} checked={product.disabled} onChange={submit} />
-  );
+  )
+  return <Switch loading={loading} checked={product.disabled} onChange={submit} />
 }
 
 export default function List() {
@@ -82,58 +57,57 @@ export default function List() {
     onQuery(..._: any) {},
     refresh() {},
     setList(..._: any) {},
-    getCurrentList: () => [],
-  });
+    getCurrentList: () => []
+  })
 
   const api = useCallback(async (p) => {
-    return fetchProductListApi({
-      pageNum: p.current,
-      pageSize: p.pageSize,
+    return fetchAppsApi({
+      pageInfo: { page: p.current, size: p.pageSize }
     }).then((res: any) => {
       return {
         list: res.data,
-        total: res.total,
-      };
-    });
-  }, []);
+        total: res.totalCount
+      }
+    })
+  }, [])
 
   const onEdit = usePersistFn((product) => {
     modal({
       data: {
-        product,
+        product
       },
       onOk() {
-        xTableRef.current.refresh();
-      },
-    } as any);
-  });
+        xTableRef.current.refresh()
+      }
+    } as any)
+  })
 
   const columnsRef = useRef([
     {
-      title: "产品名称",
-      dataIndex: "label",
-      key: "label",
+      title: '产品名称',
+      dataIndex: 'label',
+      key: 'label'
     },
     {
-      title: "key",
-      key: "key",
-      dataIndex: "key",
+      title: 'key',
+      key: 'key',
+      dataIndex: 'key'
     },
     {
-      title: "图标",
-      key: "icon",
-      dataIndex: "icon",
+      title: '图标',
+      key: 'icon',
+      dataIndex: 'icon',
       width: 50,
-      align: "center",
+      align: 'center',
       render(iconStr: string) {
-        return <Icon type={iconStr} />;
-      },
+        return <Icon type={iconStr} />
+      }
     },
     {
-      title: "禁用",
-      key: "disabled",
+      title: '禁用',
+      key: 'disabled',
       width: 80,
-      align: "center",
+      align: 'center',
       render(product: MicroApp) {
         return (
           <DisSwitch
@@ -142,65 +116,65 @@ export default function List() {
               xTableRef.current.setList((prevList: any[]) => {
                 const next = prevList.map((ru) => {
                   if (ru.key === product.key) {
-                    ru.disabled = disabled;
+                    ru.disabled = disabled
                   }
-                  return ru;
-                });
-                return next;
-              });
+                  return ru
+                })
+                return next
+              })
             }}
           />
-        );
-      },
+        )
+      }
     },
     {
-      title: "产品分类",
-      key: "classification",
-      dataIndex: "classification",
+      title: '产品分类',
+      key: 'classification',
+      dataIndex: 'classification'
     },
     {
-      title: "首页地址",
-      key: "path",
-      dataIndex: "path",
+      title: '首页地址',
+      key: 'path',
+      dataIndex: 'path'
     },
 
     {
-      title: "操作",
+      title: '操作',
       width: 140,
-      key: "action",
+      key: 'action',
       render(product: any) {
         return (
           <Action
             data={product}
             onDel={() => {
-              const list = xTableRef.current.getCurrentList();
+              const list = xTableRef.current.getCurrentList()
               if (list.length <= 1) {
                 xTableRef.current.refresh((p: any) => {
-                  const next = { ...p };
-                  next.current = next.current - 1;
-                  return next;
-                });
+                  const next = { ...p }
+                  next.current = next.current - 1
+                  return next
+                })
               } else {
-                xTableRef.current.refresh();
+                xTableRef.current.refresh()
               }
             }}
             onEdit={onEdit.bind(null, product)}
           />
-        );
-      },
-    },
-  ]);
+        )
+      }
+    }
+  ])
 
   const onNewBtnClick = useCallback(() => {
     modal({
       data: {
-        isNew: true,
+        isNew: true
       },
       onOk() {
-        xTableRef.current.refresh();
-      },
-    } as any);
-  }, []);
+        xTableRef.current.refresh()
+      }
+    } as any)
+  }, [])
 
   return (
     <>
@@ -211,54 +185,50 @@ export default function List() {
           ref={xTableRef}
           extra={
             <>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={onNewBtnClick}
-              >
+              <Button type="primary" icon={<PlusOutlined />} onClick={onNewBtnClick}>
                 新增
               </Button>
             </>
           }
           xFormRender={{
             form: {
-              type: "object",
-              layout: "inline",
+              type: 'object',
+              layout: 'inline',
               properties: {
                 appCode: {
-                  label: "产品名称",
-                  widget: "input",
-                  placeholder: "请选择产品",
+                  label: '产品名称',
+                  widget: 'input',
+                  placeholder: '请选择产品',
                   widgetProps: {
                     style: {
-                      width: "150px",
-                    },
+                      width: '150px'
+                    }
                   },
-                  options: [],
+                  options: []
                 },
                 key: {
-                  label: "key",
-                  widget: "input",
-                  placeholder: "请输入key",
+                  label: 'key',
+                  widget: 'input',
+                  placeholder: '请输入key'
                 },
                 classification: {
-                  label: "分类",
-                  widget: "select",
+                  label: '分类',
+                  widget: 'select',
                   widgetProps: {
                     style: {
-                      width: "150px",
-                    },
+                      width: '150px'
+                    }
                   },
-                  placeholder: "请选择分类",
-                  options: [],
-                },
-              },
-            },
+                  placeholder: '请选择分类',
+                  options: []
+                }
+              }
+            }
           }}
           columns={columnsRef.current as any}
           rowKey={(row: any) => `${row.key}`}
         />
       </Card>
     </>
-  );
+  )
 }

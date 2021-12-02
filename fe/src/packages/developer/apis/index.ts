@@ -1,4 +1,5 @@
-import http from './api'
+import { gql } from 'graphql-request'
+import http, { gqlApi } from './api'
 
 export const fetchProductListApi = (params: { pageNum: number; pageSize: number; appCode?: string }) =>
   http.post('/app/list', params).then((res) => {
@@ -7,6 +8,43 @@ export const fetchProductListApi = (params: { pageNum: number; pageSize: number;
       .filter((obj: Object) => Object.keys(obj).length > 1)
     return res
   })
+
+export const fetchAppsApi = (query: {
+  disabled?: boolean
+  pageInfo?: {
+    page: number
+    size: number
+  }
+}) =>
+  gqlApi
+    .request(
+      gql`
+        query apps($disabled: Boolean, $pageInfo: pageInfo) {
+          apps(disabled: $disabled, pageInfo: $pageInfo) {
+            data {
+              key
+              label
+              path
+              classification
+              icon
+              devOptions {
+                microAppOptions {
+                  disableSandbox
+                  shadowDOM
+                  inline
+                }
+              }
+              menuConfig {
+                menus
+                enabled
+              }
+            }
+          }
+        }
+      `,
+      query
+    )
+    .then((res: any) => res.apps)
 
 export const postProductApi = (params: {}) => http.post('/app/create', params)
 
