@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-export const filteredProductCountState = atom({
-  key: 'filteredProductCountState',
+export const filteredAppCountState = atom({
+  key: 'filteredAppCountState',
   default: 0
 })

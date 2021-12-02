@@ -1,4 +1,4 @@
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 import useIsProductAdmin from '@/hooks/useIsProductAdmin'
 import { envState } from '@/recoil'
 import { Select } from 'antd'
@@ -12,7 +12,7 @@ export default function DevelopSelect() {
     localStorage.setItem('GLOBAL_ENV', env)
   }, [env])
 
-  const currentProduct = useCurrentProduct()
+  const currentProduct = useCurrentApp()
 
   return (
     <Select

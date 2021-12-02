@@ -8,7 +8,7 @@ import AppRouter from './router'
 
 import '@/styles/index.less'
 import 'antd/dist/antd.less'
-import { fetchProductListApi } from './apis/app'
+import { fetchAppsApi } from './apis/app'
 import GlobalData from './components/MicroAppRouter/globalData'
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
   const setUserInfoState = useSetRecoilState(userInfoState)
   useEffect(() => {
     ;(async () => {
-      let [userInfo, productList]: any = await Promise.all([fetchUserInfoApi(), fetchProductListApi()])
+      let [userInfo, productList]: any = await Promise.all([fetchUserInfoApi(), fetchAppsApi({ disabled: false })])
 
       console.log(productList)
 

@@ -33,6 +33,7 @@ type Mutation {
   login(input: LoginInput!): Token!
   removeStar(appKey: String!): StarActionResult!
   updateApp(app: UpdateAppInput!): app!
+  updateStar(type: String!, updateStarredList: [UpdateStarInput!]!): StarActionsResult!
 }
 
 input NewAppInput {
@@ -45,11 +46,6 @@ input NewAppInput {
   path: String!
 }
 
-input PageInfoModel {
-  page: Float!
-  size: Float!
-}
-
 type PaginatedApp {
   data: [app!]
   totalCount: Int!
@@ -57,12 +53,16 @@ type PaginatedApp {
 
 type Query {
   app(key: String!): app!
-  apps(disabled: Boolean, key: String, pageInfo: PageInfoModel): PaginatedApp!
+  apps(disabled: Boolean, key: String, pageInfo: pageInfo): PaginatedApp!
   user: user!
 }
 
 type StarActionResult {
   starrable: starrable!
+}
+
+type StarActionsResult {
+  starrable: [starrable!]!
 }
 
 type Token {
@@ -79,6 +79,11 @@ input UpdateAppInput {
   path: String
 }
 
+input UpdateStarInput {
+  index: Float!
+  starrableId: String!
+}
+
 """app"""
 type app {
   classification: String!
@@ -92,11 +97,16 @@ type app {
   path: String!
 }
 
+input pageInfo {
+  page: Float!
+  size: Float!
+}
+
 union starrable = app
 
 """user"""
 type user {
   id: ID!
   name: String!
-  starredApps: [app!]!
+  starredApps(pageInfo: pageInfo): [app!]!
 }

@@ -1,20 +1,16 @@
-import { fetchRecentVisitApi, fetchStarredProductListApi, formatProduct, postStarredApi } from '@/apis/app'
-import { microAppListState } from '@/recoil'
-import { AppstoreOutlined, CloseOutlined, DragOutlined, SearchOutlined } from '@ant-design/icons'
+import { fetchRecentVisitApi, fetchStarredAppsApi, postStarredApi } from '@/apis/app'
+import { SearchOutlined } from '@ant-design/icons'
 import { createFuncModal, usePersistFn } from '@gcer/react-air'
 import { Typography, Drawer, Input } from 'antd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useRecoilValue } from 'recoil'
 import AppItem from './components/AppItem/AppItem'
 import className from './index.module.less'
-import { recentVisitApi, updateRecent } from '@/apis/landing'
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 import PinyinMatch from 'pinyin-match'
-import ProductWrap from './components/ProductWrap/ProductWrap'
-import { filteredProductCountState } from './recoil'
-import Icon from '../Icon/Icon'
+import AppWrap from './components/AppWrap/AppWrap'
+import { filteredAppCountState } from './recoil'
 import LiftList from './components/LiftList/LiftList'
 const { Paragraph, Text } = Typography
 
@@ -24,50 +20,50 @@ interface Props {
 }
 
 export default function MenusDrawer({ visible, close }: Props) {
-  const currentProduct = useCurrentProduct()
+  const currentApp = useCurrentApp()
 
-  const { value: recentList = [] }: any = useAsync(() => fetchRecentVisitApi(), [currentProduct])
+  const { value: recentList = [] }: any = useAsync(() => fetchRecentVisitApi(), [currentApp])
   // TODO: useAsync 支持set
-  // const { value: starredProductList = [] } = useAsync<() => Promise<any[]>>(fetchStarredProductListApi as any, [])
 
-  const [starredProductList, setStarredProductList] = useState<MicroApp[]>([])
+  const [starredApps, setStarredApps] = useState<MicroApp[]>([])
   useEffect(() => {
-    fetchStarredProductListApi()
-      .then((res) => res.sort((a: any, b: any) => a.index - b.index))
-      .then(setStarredProductList as any)
+    fetchStarredAppsApi().then(setStarredApps as any)
   }, [])
 
-  const onChangeStarredProductList = useCallback(async (nextList) => {
-    setStarredProductList(nextList)
-    await postStarredApi(nextList)
+  const onChangeStarredApps = useCallback(async (nextList) => {
+    setStarredApps(nextList)
+    await postStarredApi(
+      nextList.map((item: MicroApp) => ({ index: item.index, starrableId: item.key })),
+      'app'
+    )
   }, [])
 
-  const onClickStar = usePersistFn(async (product: MicroApp, e: Event) => {
+  const onClickStar = usePersistFn(async (app: MicroApp, e: Event) => {
     e.stopPropagation()
     e.preventDefault()
-    const cP = starredProductList.find((sp) => sp.key === product.key)
+    const cP = starredApps.find((sp) => sp.key === app.key)
     let nextList = []
     if (cP) {
-      nextList = starredProductList.filter((sp) => sp.key !== product.key)
+      nextList = starredApps.filter((sp) => sp.key !== app.key)
     } else {
-      nextList = [...starredProductList, product]
+      nextList = [...starredApps, app]
     }
 
     nextList = nextList.sort((pp, np) => pp.index - np.index).map((p, index) => ({ ...p, index }))
-    onChangeStarredProductList(nextList)
+    onChangeStarredApps(nextList)
   })
 
   const [keyword, setKeyword] = useState('')
 
   const filterFn = useMemo(() => {
     if (keyword) {
-      return (product: MicroApp) => {
-        return !!PinyinMatch.match(product.label, keyword)
+      return (app: MicroApp) => {
+        return !!PinyinMatch.match(app.label, keyword)
       }
     }
   }, [keyword])
 
-  const filteredProductCount = useRecoilValue(filteredProductCountState)
+  const filteredAppCount = useRecoilValue(filteredAppCountState)
 
   return (
     <Drawer
@@ -86,8 +82,8 @@ export default function MenusDrawer({ visible, close }: Props) {
       <div className={`${className.menusDrawer}`}>
         <LiftList
           onUnStarred={onClickStar}
-          starredProductList={starredProductList}
-          onChangeStarredProductList={onChangeStarredProductList}
+          starredApps={starredApps}
+          onChangeStarredApps={onChangeStarredApps}
           close={close}
         />
         <div className={className.right}>
@@ -107,7 +103,7 @@ export default function MenusDrawer({ visible, close }: Props) {
               {recentList.map((item: MicroApp, index: number) => {
                 return (
                   <AppItem
-                    starred={!!starredProductList.find((sp) => sp.key === item.key)}
+                    starred={!!starredApps.find((sp) => sp.key === item.key)}
                     onClickStar={onClickStar.bind(null, item)}
                     onClick={close}
                     key={`${index}`}
@@ -121,7 +117,7 @@ export default function MenusDrawer({ visible, close }: Props) {
           <div className="allAppWrap">
             {!!keyword ? (
               <Paragraph className={className.result}>
-                共找到 <Text className="hl primary">{filteredProductCount}</Text> 个与
+                共找到 <Text className="hl primary">{filteredAppCount}</Text> 个与
                 <Text code className="hl primary">
                   {keyword}
                 </Text>
@@ -132,11 +128,11 @@ export default function MenusDrawer({ visible, close }: Props) {
             )}
 
             <div className={`${className.col}`}>
-              <ProductWrap
+              <AppWrap
                 filter={filterFn}
                 onItemClick={close as any}
                 onClickStar={onClickStar}
-                starredProductList={starredProductList}
+                starredApps={starredApps}
               />
             </div>
           </div>

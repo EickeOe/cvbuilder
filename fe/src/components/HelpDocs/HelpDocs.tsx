@@ -1,5 +1,5 @@
 import { fetchDocListApi, fetchQAListApi } from '@/apis/doc'
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 import { microAppListState } from '@/recoil'
 import { DownOutlined, EditOutlined, FileTextOutlined } from '@ant-design/icons'
 import { Collapse, List } from 'antd'
@@ -47,7 +47,7 @@ export default function HelpDocs() {
   }, [docList, microAppList])
 
   const currentAppPath = location.pathname.match(/^\/[^\/]*/g)?.[0]
-  const currentProduct = useCurrentProduct()
+  const currentProduct = useCurrentApp()
   return (
     <div className={styles.helpDocs}>
       <div>

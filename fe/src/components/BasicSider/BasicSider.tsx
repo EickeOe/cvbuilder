@@ -6,7 +6,7 @@ import { useHistory } from 'react-router'
 const { Sider } = Layout
 import NavMenu from '../NavMenu/NavMenu'
 import Icon from '../Icon/Icon'
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 interface Props {
   product: MicroApp
   back: {
@@ -23,7 +23,7 @@ export default function BasicSider(props: Props) {
 
   const [siderSwitch, setSiderSwitch] = useState(true)
   const siderWidth = useMemo(() => (siderSwitch ? 208 : 48), [siderSwitch])
-  const currentProduct = useCurrentProduct()
+  const currentProduct = useCurrentApp()
 
   return (
     <>

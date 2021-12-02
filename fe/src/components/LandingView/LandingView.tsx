@@ -9,8 +9,7 @@ import LandingNotic from './components/Notice'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { fastMenus, recentVisitApi, queryProductList, queryDocList, queryBulletn } from '@/apis/landing'
-import { fetchProductListApi } from '@/packages/control/apis'
+import { fastMenus, recentVisitApi, queryApp, queryDocList, queryBulletn } from '@/apis/landing'
 import { microAppListState } from '@/recoil'
 import { useRecoilValue } from 'recoil'
 

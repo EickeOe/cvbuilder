@@ -8,8 +8,8 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 interface Props {
   close(e: any): void
   onUnStarred(..._: any): void
-  starredProductList: MicroApp[]
-  onChangeStarredProductList(list: MicroApp[]): void
+  starredApps: MicroApp[]
+  onChangeStarredApps(list: MicroApp[]): void
 }
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
@@ -20,22 +20,22 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
   return result
 }
 
-export default function LeftList({ close, onUnStarred, starredProductList, onChangeStarredProductList }: Props) {
+export default function LeftList({ close, onUnStarred, starredApps, onChangeStarredApps }: Props) {
   return (
     <DragDropContext
       onDragEnd={(result) => {
         if (!result.destination) {
           return
         }
-        const items = reorder(starredProductList, result.source.index, result.destination.index)
-        onChangeStarredProductList(items.map((item, index) => ({ ...item, index })))
+        const items = reorder(starredApps, result.source.index, result.destination.index)
+        onChangeStarredApps(items.map((item, index) => ({ ...item, index })))
       }}
     >
       <div className={`${className.left}`}>
         <Droppable droppableId="droppable">
           {(provided, dropSnapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {starredProductList.map((item, index) => (
+              {starredApps.map((item, index) => (
                 <Draggable key={item.key} draggableId={item.key} index={index}>
                   {(provided, snapshot) => (
                     <Link

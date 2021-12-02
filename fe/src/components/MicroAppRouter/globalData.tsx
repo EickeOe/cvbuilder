@@ -1,4 +1,4 @@
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 import { apiEnvState, envState } from '@/recoil'
 import { baseAppObservable, baseAppSubject } from '@/rx'
 import getDomain4Env from '@/utils/getDomain4Env'
@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil'
 
 export default function GlobalData() {
   const env = useRecoilValue(envState)
-  const currentProduct = useCurrentProduct()
+  const currentProduct = useCurrentApp()
 
   const apiEnv = useRecoilValue(apiEnvState)
   useEffect(() => {

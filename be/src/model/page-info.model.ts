@@ -1,33 +1,27 @@
-import { Type } from '@nestjs/common';
-import {
-  Field,
-  InputType,
-  Int,
-  InterfaceType,
-  ObjectType,
-} from '@nestjs/graphql';
+import { Type } from '@nestjs/common'
+import { Field, InputType, Int, InterfaceType, ObjectType } from '@nestjs/graphql'
 
-@InputType()
+@InputType('pageInfo')
 export class PageInfoModel {
   @Field(() => Number)
-  page: number;
+  page: number
   @Field(() => Number)
-  size: number;
+  size: number
 }
 
 export interface IPaginatedType<T> {
-  data: T[];
-  totalCount: number;
+  data: T[]
+  totalCount: number
 }
 
 export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
   @ObjectType({ isAbstract: true })
   abstract class PaginatedType implements IPaginatedType<T> {
     @Field((type) => [classRef], { nullable: true })
-    data: T[];
+    data: T[]
 
     @Field((type) => Int)
-    totalCount: number;
+    totalCount: number
   }
-  return PaginatedType as Type<IPaginatedType<T>>;
+  return PaginatedType as Type<IPaginatedType<T>>
 }

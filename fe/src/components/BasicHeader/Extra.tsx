@@ -1,4 +1,4 @@
-import useCurrentProduct from '@/hooks/useCurrentProduct'
+import useCurrentApp from '@/hooks/useCurrentApp'
 import { apiEnvState } from '@/recoil'
 import getDomain4Env from '@/utils/getDomain4Env'
 import isPrEnv from '@/utils/isPrEnv'
@@ -11,7 +11,7 @@ import styles from './index.module.less'
 
 export default function Extra() {
   const [apiEnv, setApiEnv] = useRecoilState(apiEnvState)
-  const currentProduct = useCurrentProduct()
+  const currentProduct = useCurrentApp()
   const [hasEnv, envList, envLabelMap] = useMemo(() => {
     const has = !!currentProduct.envList
     const map = new Map()

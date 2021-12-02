@@ -1,8 +1,8 @@
 import http from './api'
 
 const formatProduct = (data: any) => {
-  let cbData:any = ''
-  data.data ? cbData = data.data : cbData = data
+  let cbData: any = ''
+  data.data ? (cbData = data.data) : (cbData = data)
   return (
     cbData
       .map((obj: any) => {
@@ -27,7 +27,7 @@ export const addFastListApi = (fastViews: { fastViews: Array<string> }) =>
   http.post<Promise<any[]>>('/user/fast/update', { fastViews })
 
 // 搜索产品
-export const queryProductList = (params: { appCode?: string; name?: string; pageNum: number; pageSize: number }) =>
+export const queryApp = (params: { appCode?: string; name?: string; pageNum: number; pageSize: number }) =>
   http.post('/app/list', params).then(formatProduct)
 
 //  查询文档

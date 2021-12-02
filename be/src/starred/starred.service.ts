@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AppModel } from 'src/app/app.model'
+import { PageInfoModel } from 'src/model/page-info.model'
+import { pageInfo2typeorm } from 'src/utils/page-info2typeorm'
 import { Repository } from 'typeorm'
 import { StarredModel } from './starred.model'
 
@@ -11,6 +13,13 @@ export class StarredService {
     private readonly repository: Repository<StarredModel>
   ) {}
 
+  save(a: any) {
+    this.repository.save(a)
+  }
+
+  remove(a: any) {
+    this.repository.remove(a)
+  }
   async addStar(userId: string, starrableId: string, type: string) {
     const starred = this.repository.create({
       starrableId,
@@ -32,12 +41,17 @@ export class StarredService {
       }
     })
   }
-  async findAppsByUserAndType(userId: string, type?: string): Promise<StarredModel[]> {
+  async findAppsByUserAndType(userId: string, type?: string, pageInfo?: PageInfoModel): Promise<StarredModel[]> {
+    const page = pageInfo2typeorm(pageInfo)
     return this.repository.find({
       where: {
         userId,
         type
-      }
+      },
+      order: {
+        index: 'ASC'
+      },
+      ...page
     })
   }
 }

@@ -1,48 +1,45 @@
-import { Space, Dropdown, Menu, Avatar } from "antd";
-import { LogoutOutlined, QuestionCircleOutlined } from "@ant-design/icons";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { envState, userInfoState } from "@/recoil";
+import { Space, Dropdown, Menu, Avatar } from 'antd'
+import { LogoutOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { envState, userInfoState } from '@/recoil'
 // import { ENV } from '@/configs/config'
-import { Link } from "react-router-dom";
-import className from "./index.module.less";
-import MenuBtn from "../MenuBtn/MenuBtn";
-import { useBoolean } from "@/hooks/useBoolean";
-import MenusDrawer from "../MenusDrawer/MenusDrawer";
-import HelpDocsModal from "../HelpDocsModal/HelpDocsModal";
-import WorkOrderDrawer from "../WorkOrderDrawer/WorkOrderDrawer";
-import Extra from "./Extra";
-import { logout } from "@/apis/api";
-import { useEffect, useMemo } from "react";
-import useIsProductAdmin from "@/hooks/useIsProductAdmin";
-import useCurrentProduct from "@/hooks/useCurrentProduct";
-import DevelopSelect from "./DevelopSelect";
+import { Link } from 'react-router-dom'
+import className from './index.module.less'
+import MenuBtn from '../MenuBtn/MenuBtn'
+import { useBoolean } from '@/hooks/useBoolean'
+import MenusDrawer from '../MenusDrawer/MenusDrawer'
+import HelpDocsModal from '../HelpDocsModal/HelpDocsModal'
+import WorkOrderDrawer from '../WorkOrderDrawer/WorkOrderDrawer'
+import Extra from './Extra'
+import { logout } from '@/apis/api'
+import { useEffect, useMemo } from 'react'
+import useIsProductAdmin from '@/hooks/useIsProductAdmin'
+import useCurrentApp from '@/hooks/useCurrentApp'
+import DevelopSelect from './DevelopSelect'
 
 interface Props {}
 
 export default function BasicHeader({}: Props) {
-  const userInfo = useRecoilValue<any>(userInfoState);
-  const currentProduct = useCurrentProduct();
-  const isCurrentProductAdmin = useIsProductAdmin(currentProduct);
-  const [env, setEnv] = useRecoilState(envState);
+  const userInfo = useRecoilValue<any>(userInfoState)
+  const currentProduct = useCurrentApp()
+  const isCurrentProductAdmin = useIsProductAdmin(currentProduct)
+  const [env, setEnv] = useRecoilState(envState)
 
-  const [isOpen, setIsOpen] = useBoolean(false);
-  const [vis, setVis] = useBoolean();
-  const [workOrderVis, setWorkOrderVis] = useBoolean();
+  const [isOpen, setIsOpen] = useBoolean(false)
+  const [vis, setVis] = useBoolean()
+  const [workOrderVis, setWorkOrderVis] = useBoolean()
   const hasEnv = useMemo(() => {
-    return !!currentProduct.envList;
-  }, [currentProduct]);
+    return !!currentProduct.envList
+  }, [currentProduct])
 
   useEffect(() => {
     if (Object.keys(currentProduct).length > 0) {
       if (!isCurrentProductAdmin || !hasEnv) {
-        setEnv("prod");
+        setEnv('prod')
       }
     }
-  }, [currentProduct, isCurrentProductAdmin]);
-  const theme =
-    env === "prod" || Object.keys(currentProduct).length === 0
-      ? className.light
-      : className.dark;
+  }, [currentProduct, isCurrentProductAdmin])
+  const theme = env === 'prod' || Object.keys(currentProduct).length === 0 ? className.light : className.dark
 
   return (
     <>
@@ -53,11 +50,7 @@ export default function BasicHeader({}: Props) {
               <MenuBtn onClick={setIsOpen.toggle} isOpen={isOpen} />
             </div>
             <Space size={16}>
-              <Avatar
-                shape="square"
-                size={24}
-                icon={<img src="/favicon.ico" />}
-              />
+              <Avatar shape="square" size={24} icon={<img src="/favicon.ico" />} />
               <span>CV Builder</span>
               <Extra />
             </Space>
@@ -70,13 +63,9 @@ export default function BasicHeader({}: Props) {
                   {hasEnv ? (
                     <DevelopSelect />
                   ) : currentProduct.isBaseSubProduct ? (
-                    ""
+                    ''
                   ) : (
-                    <Link
-                      to={`/developer/product/detail?key=${currentProduct.key}`}
-                    >
-                      配置环境
-                    </Link>
+                    <Link to={`/developer/product/detail?key=${currentProduct.key}`}>配置环境</Link>
                   )}
                 </span>
                 <Link to="/developer/productManage">
@@ -100,7 +89,7 @@ export default function BasicHeader({}: Props) {
                   <Menu.Item
                     key="logout"
                     onClick={() => {
-                      logout();
+                      logout()
                     }}
                   >
                     <LogoutOutlined />
@@ -113,9 +102,7 @@ export default function BasicHeader({}: Props) {
                 <Avatar
                   style={{ marginRight: 8 }}
                   size={24}
-                  icon={
-                    <img src="https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png" />
-                  }
+                  icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png" />}
                 />
                 <span>{userInfo?.realName}</span>
               </div>
@@ -127,5 +114,5 @@ export default function BasicHeader({}: Props) {
       <WorkOrderDrawer visible={workOrderVis} close={setWorkOrderVis.off} />
       <MenusDrawer visible={isOpen} close={setIsOpen.off} />
     </>
-  );
+  )
 }

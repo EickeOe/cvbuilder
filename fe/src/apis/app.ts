@@ -12,22 +12,40 @@ export const formatProduct = (data: any) => {
   )
 }
 
-export const fetchProductListApi = () =>
+export const fetchAppsApi = (query: {
+  disabled?: boolean
+  pageInfo?: {
+    page: number
+    size: number
+  }
+}) =>
   gqlApi
     .request(
       gql`
-        query {
-          apps {
+        query apps($disabled: Boolean, $pageInfo: pageInfo) {
+          apps(disabled: $disabled, pageInfo: $pageInfo) {
             data {
               key
               label
               path
               classification
               icon
+              devOptions {
+                microAppOptions {
+                  disableSandbox
+                  shadowDOM
+                  inline
+                }
+              }
+              menuConfig {
+                menus
+                enabled
+              }
             }
           }
         }
-      `
+      `,
+      query
     )
     .then((res: any) => res.apps.data)
 
@@ -49,13 +67,14 @@ export const fetchRecentVisitApi = () =>
       `
     )
     .then((res: any) => res.apps.data)
-export const fetchStarredProductListApi = () =>
+
+export const fetchStarredAppsApi = () =>
   gqlApi
     .request(
       gql`
-        query {
-          apps {
-            data {
+        {
+          user {
+            starredApps {
               key
               label
               path
@@ -66,7 +85,27 @@ export const fetchStarredProductListApi = () =>
         }
       `
     )
-    .then((res: any) => res.apps.data)
+    .then((res: any) => res.user.starredApps)
 
-export const postStarredApi = (collectViews: { key: string; index?: number }[]) =>
-  http.post('/user/collect/update', { collectViews })
+export const postStarredApi = (updateStarredList: { starrableId: string; index?: number }[], type: string) =>
+  gqlApi.request(
+    gql`
+      mutation updateStar($updateStarredList: [UpdateStarInput!]!, $type: String!) {
+        updateStar(updateStarredList: $updateStarredList, type: $type) {
+          starrable {
+            ... on app {
+              key
+              label
+              path
+              classification
+              icon
+            }
+          }
+        }
+      }
+    `,
+    {
+      updateStarredList,
+      type
+    }
+  )

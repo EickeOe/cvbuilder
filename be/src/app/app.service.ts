@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PageInfoModel } from 'src/model/page-info.model'
+import { pageInfo2typeorm } from 'src/utils/page-info2typeorm'
 import { FindManyOptions, Like, Repository } from 'typeorm'
 import { AppModel } from './app.model'
 
@@ -42,9 +43,7 @@ export class AppService {
   }
 
   async fetchApps(inputParams: Partial<AppModel>, pageInfo: PageInfoModel) {
-    const take = pageInfo?.size
-    const skip = ((pageInfo?.page || 1) - 1) * pageInfo?.size
-
+    const page = pageInfo2typeorm(pageInfo)
     const query: FindManyOptions<AppModel> = {}
 
     if (Object.keys(inputParams).length > 0) {
@@ -56,8 +55,7 @@ export class AppService {
 
     const [data, totalCount] = await this.repository.findAndCount({
       ...query,
-      take: take,
-      skip: skip
+      ...page
     })
     return {
       data,
