@@ -6,7 +6,7 @@ import XTableRender from '@/components/XTableRender/XTableRender'
 import { modal } from './Modal/Modal'
 import { useAsyncFn } from 'react-use'
 import { usePersistFn, useSearchParams } from '@gcer/react-air'
-import { deleteProductApi, fetchAppsApi, putProductApi } from 'developer/apis'
+import { deleteProductApi, fetchAppsApi, putAppApi } from 'developer/apis'
 import { Link } from 'react-router-dom'
 import { authModal } from './AuthModal/AuthModal'
 import Icon from '@/components/Icon/Icon'
@@ -18,7 +18,7 @@ function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): v
   }, [])
   return (
     <>
-      <Link to={`/developer/product/detail?key=${data.key}`}>
+      <Link to={`/developer/app/detail?key=${data.key}`}>
         <Button type="link">详情</Button>
       </Link>
       <Popconfirm title="确认删除?" onConfirm={del} okText="确定" cancelText="取消">
@@ -30,25 +30,16 @@ function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): v
   )
 }
 
-function DisSwitch({ product, onChange }: { product: MicroApp; onChange(value: boolean): void }) {
+function DisSwitch({ app, onChange }: { app: MicroApp; onChange(value: boolean): void }) {
   const [{ loading }, submit] = useAsyncFn(
     async (disabled) => {
-      const values = product
-      const params = {
-        code: values.key,
-        name: values.label,
-        menuConfig: JSON.stringify({
-          ...values,
-          disabled
-        })
-      }
-
-      await putProductApi(params)
+      await putAppApi({ ...app, disabled })
+      console.log({ ...app, disabled })
       onChange(disabled)
     },
-    [product]
+    [app]
   )
-  return <Switch loading={loading} checked={product.disabled} onChange={submit} />
+  return <Switch loading={loading} checked={app.disabled} onChange={submit} />
 }
 
 export default function List() {
@@ -71,10 +62,10 @@ export default function List() {
     })
   }, [])
 
-  const onEdit = usePersistFn((product) => {
+  const onEdit = usePersistFn((app) => {
     modal({
       data: {
-        product
+        app
       },
       onOk() {
         xTableRef.current.refresh()
@@ -108,14 +99,14 @@ export default function List() {
       key: 'disabled',
       width: 80,
       align: 'center',
-      render(product: MicroApp) {
+      render(app: MicroApp) {
         return (
           <DisSwitch
-            product={product}
+            app={app}
             onChange={(disabled) => {
               xTableRef.current.setList((prevList: any[]) => {
                 const next = prevList.map((ru) => {
-                  if (ru.key === product.key) {
+                  if (ru.key === app.key) {
                     ru.disabled = disabled
                   }
                   return ru
@@ -142,10 +133,10 @@ export default function List() {
       title: '操作',
       width: 140,
       key: 'action',
-      render(product: any) {
+      render(app: any) {
         return (
           <Action
-            data={product}
+            data={app}
             onDel={() => {
               const list = xTableRef.current.getCurrentList()
               if (list.length <= 1) {
@@ -158,7 +149,7 @@ export default function List() {
                 xTableRef.current.refresh()
               }
             }}
-            onEdit={onEdit.bind(null, product)}
+            onEdit={onEdit.bind(null, app)}
           />
         )
       }

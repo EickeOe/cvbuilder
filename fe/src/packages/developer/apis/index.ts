@@ -55,12 +55,19 @@ export const deleteProductApi = (params: { code: string }) =>
     }
   })
 
-export const putProductApi = (params: any) =>
-  http.post('/app/update', params, {
-    headers: {
-      appCode: params.code
+export const putAppApi = (app: MicroApp) =>
+  gqlApi.request(
+    gql`
+      mutation updateApp($app: UpdateAppInput!) {
+        updateApp(app: $app) {
+          key
+        }
+      }
+    `,
+    {
+      app
     }
-  })
+  )
 
 export const fetchDocListApi = (params: { pageNum: number; pageSize: number; appCode?: string }) =>
   http.post('/document/list', params, {

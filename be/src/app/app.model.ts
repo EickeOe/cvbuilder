@@ -1,17 +1,18 @@
 import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm'
-import { Field, ID, InterfaceType, ObjectType } from '@nestjs/graphql'
+import { Field, ID, InputType, InterfaceType, ObjectType } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
-
+@InputType('MenuConfigInput')
 @ObjectType()
-class MenuConfig {
+export class MenuConfig {
   @Field((type) => GraphQLJSON, { nullable: true })
   menus: { [key: string]: any }
   @Field()
   enabled: boolean
 }
 
+@InputType('MicroAppOptionsInput')
 @ObjectType()
-class MicroAppOptions {
+export class MicroAppOptions {
   @Field()
   shadowDOM: boolean
   @Field()
@@ -19,9 +20,9 @@ class MicroAppOptions {
   @Field()
   disableSandbox: boolean
 }
-
+@InputType('DevOptionsInput')
 @ObjectType()
-class DevOptions {
+export class DevOptions {
   @Field((type) => MicroAppOptions, { nullable: true })
   microAppOptions: MicroAppOptions
 }

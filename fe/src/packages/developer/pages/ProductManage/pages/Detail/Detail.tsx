@@ -1,56 +1,49 @@
-import XFormRender from "@/components/NXFormRender/XFormRender";
-import { fetchProductListApi, putProductApi } from "@/packages/developer/apis";
-import { currentManageProductState } from "@/packages/developer/recoil";
-import { getSearchParams } from "@gcer/react-air";
-import { Button, Card, notification, PageHeader } from "antd";
-import { useEffect, useRef } from "react";
-import { useAsync, useAsyncFn } from "react-use";
-import { useRecoilState } from "recoil";
+import XFormRender from '@/components/NXFormRender/XFormRender'
+import { fetchProductListApi, putAppApi } from '@/packages/developer/apis'
+import { currentManageProductState } from '@/packages/developer/recoil'
+import { getSearchParams } from '@gcer/react-air'
+import { Button, Card, notification, PageHeader } from 'antd'
+import { useEffect, useRef } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useRecoilState } from 'recoil'
 
-import formJson from "./form.json";
-import styles from "./index.module.less";
+import formJson from './form.json'
+import styles from './index.module.less'
 
 export default function Detail() {
-  const formRef = useRef<any>();
-  const [detail, setCurrentManageProductState] = useRecoilState(
-    currentManageProductState
-  );
+  const formRef = useRef<any>()
+  const [detail, setCurrentManageProductState] = useRecoilState(currentManageProductState)
   useAsync(async () => {
-    const { key } = getSearchParams(location.search);
+    const { key } = getSearchParams(location.search)
     return fetchProductListApi({
       pageNum: 1,
       pageSize: 1,
-      appCode: key,
+      appCode: key
     })
       .then((res: any) => {
-        return res.data[0];
+        return res.data[0]
       })
       .then((data) => {
-        setCurrentManageProductState(data);
-        return data;
-      });
-  }, []);
+        setCurrentManageProductState(data)
+        return data
+      })
+  }, [])
 
   useEffect(() => {
     if (detail) {
-      formRef.current.setFieldsValue(JSON.parse(JSON.stringify(detail)));
+      formRef.current.setFieldsValue(JSON.parse(JSON.stringify(detail)))
     }
-  }, [detail]);
+  }, [detail])
 
   const [{ loading }, submit] = useAsyncFn(async () => {
-    const values = await formRef.current.validateAll();
-    const params = {
-      code: values.key,
-      name: values.label,
-      menuConfig: JSON.stringify(values),
-    };
+    const values = await formRef.current.validateAll()
 
-    await putProductApi(params);
-    setCurrentManageProductState(values);
+    await putAppApi({ ...detail, ...values })
+    setCurrentManageProductState(values)
     notification.success({
-      message: `保存成功！`,
-    });
-  }, []);
+      message: `保存成功！`
+    })
+  }, [])
   return (
     <>
       <PageHeader
@@ -70,5 +63,5 @@ export default function Detail() {
         </div>
       </Card>
     </>
-  );
+  )
 }

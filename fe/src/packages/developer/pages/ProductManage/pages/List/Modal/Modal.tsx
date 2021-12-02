@@ -1,28 +1,28 @@
-import XFormRender from "@/components/NXFormRender/XFormRender";
-import XDrawer from "@/components/XDrawer/Drawer";
-import { postProductApi, putProductApi } from "@/packages/developer/apis";
-import { createFuncModal } from "@gcer/react-air";
-import { Button, notification } from "antd";
-import { useEffect, useMemo, useRef } from "react";
-import { useAsyncFn } from "react-use";
-import json from "./form.json";
-import styles from "./index.module.less";
+import XFormRender from '@/components/NXFormRender/XFormRender'
+import XDrawer from '@/components/XDrawer/Drawer'
+import { postProductApi, putAppApi } from '@/packages/developer/apis'
+import { createFuncModal } from '@gcer/react-air'
+import { Button, notification } from 'antd'
+import { useEffect, useMemo, useRef } from 'react'
+import { useAsyncFn } from 'react-use'
+import json from './form.json'
+import styles from './index.module.less'
 
 interface Props {
   data?: {
-    product?: any;
-  };
-  visible: boolean;
-  onOk?(): void;
-  close(): void;
+    product?: any
+  }
+  visible: boolean
+  onOk?(): void
+  close(): void
 }
 
 export default function Modal({ visible, data, close, onOk }: Props) {
-  const formRef = useRef<any>();
+  const formRef = useRef<any>()
 
   const isNew = useMemo(() => {
-    return !data?.product;
-  }, [data]);
+    return !data?.product
+  }, [data])
 
   const formJson = useMemo(() => {
     // if (isNew) {
@@ -35,42 +35,37 @@ export default function Modal({ visible, data, close, onOk }: Props) {
     //   }
     // }
 
-    return json;
-  }, [isNew]);
+    return json
+  }, [isNew])
 
   useEffect(() => {
     if (visible && data?.product) {
-      const product = data.product;
-      formRef.current.setFieldsValue(product);
+      const product = data.product
+      formRef.current.setFieldsValue(product)
     }
-  }, [visible, data]);
+  }, [visible, data])
 
   const [{ loading }, ok] = useAsyncFn(async () => {
-    const values = await formRef.current.validate();
-    const params = {
-      code: values.key,
-      name: values.label,
-      menuConfig: JSON.stringify(values),
-    };
+    const values = await formRef.current.validate()
 
     if (isNew) {
-      await postProductApi(params);
+      await postProductApi(values)
     } else {
-      await putProductApi(params);
+      await putAppApi(values)
     }
-    onOk?.();
-    close();
+    onOk?.()
+    close()
     notification.success({
-      message: `${isNew ? "新增" : "编辑"}产品成功！`,
-    });
-  }, [isNew]);
+      message: `${isNew ? '新增' : '编辑'}产品成功！`
+    })
+  }, [isNew])
   return (
     <XDrawer
       width={800}
       footer={
         <div
           style={{
-            textAlign: "right",
+            textAlign: 'right'
           }}
         >
           <Button onClick={close} style={{ marginRight: 8 }}>
@@ -81,7 +76,7 @@ export default function Modal({ visible, data, close, onOk }: Props) {
           </Button>
         </div>
       }
-      title={`${isNew ? "新增" : "编辑"}产品`}
+      title={`${isNew ? '新增' : '编辑'}产品`}
       placement="right"
       onClose={close}
       visible={visible}
@@ -90,6 +85,6 @@ export default function Modal({ visible, data, close, onOk }: Props) {
         <XFormRender ref={formRef} options={formJson as any} />
       </div>
     </XDrawer>
-  );
+  )
 }
-export const modal = createFuncModal(Modal);
+export const modal = createFuncModal(Modal)

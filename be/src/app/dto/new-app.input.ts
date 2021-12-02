@@ -1,80 +1,67 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsOptional, Length, MaxLength } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql'
+import { IsOptional, Length, MaxLength } from 'class-validator'
+import { DevOptions, MenuConfig } from '../app.model'
 
 @InputType()
 export class NewAppInput {
   @Field()
   @MaxLength(5)
-  key: string;
+  key: string
 
   @Field()
   @MaxLength(10)
-  label: string;
+  label: string
 
   @Field(() => Boolean, { nullable: true })
-  isBaseApp: boolean;
+  isBaseApp: boolean
 
   @Field()
-  path: string;
+  path: string
 
   @Field()
-  classification: string;
+  classification: string
 
   @Field(() => Boolean, { nullable: true })
-  disabled: boolean;
+  disabled: boolean
 
   @Field()
-  icon: string;
+  icon: string
 
-  menuConfig: {
-    menus: {};
-    enabled: boolean;
-  };
+  @Field(() => MenuConfig, { nullable: true })
+  menuConfig: MenuConfig
 
-  devOptions: {
-    microAppOptions: {
-      shadowDOM: boolean;
-      inline: boolean;
-      disableSandbox: boolean;
-    };
-  };
+  @Field(() => DevOptions, { nullable: true })
+  devOptions: DevOptions
 }
 
 @InputType()
 export class UpdateAppInput {
   @Field()
   @MaxLength(5)
-  key: string;
+  key: string
 
   @Field({ nullable: true })
   @MaxLength(10)
-  label: string;
+  label: string
 
   @Field(() => Boolean, { nullable: true })
-  isBaseApp: boolean;
+  isBaseApp: boolean
 
   @Field({ nullable: true })
-  path: string;
+  path: string
 
   @Field({ nullable: true })
-  classification: string;
+  classification: string
 
   @Field(() => Boolean, { nullable: true })
-  disabled: boolean;
+  disabled: boolean
 
   @Field({ nullable: true })
-  icon: string;
+  icon: string
 
-  menuConfig: {
-    menus: {};
-    enabled: boolean;
-  };
+  @Field(() => MenuConfig, { nullable: true })
+  menuConfig: MenuConfig
 
-  devOptions: {
-    microAppOptions: {
-      shadowDOM: boolean;
-      inline: boolean;
-      disableSandbox: boolean;
-    };
-  };
+  @Field(() => DevOptions, { nullable: true })
+  devOptions: DevOptions
 }
