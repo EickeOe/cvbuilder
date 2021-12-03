@@ -12,6 +12,8 @@ import { APP_GUARD } from '@nestjs/core'
 import { GqlAuthGuard } from './auth/gql-auth.guard'
 import { StarredModel } from './starred/starred.model'
 import { StarredModule } from './starred/starred.module'
+import { LicenseModule } from './license/license.module'
+import { LicenseModel } from './license/license.model'
 @Module({
   imports: [
     AModule,
@@ -23,7 +25,7 @@ import { StarredModule } from './starred/starred.module'
       password: 'eick',
       database: 'cvb',
       logging: true,
-      entities: [AppModel, UserModel, StarredModel],
+      entities: [AppModel, UserModel, StarredModel, LicenseModel],
       synchronize: true
     }),
     GraphQLModule.forRoot({
@@ -32,7 +34,8 @@ import { StarredModule } from './starred/starred.module'
     }),
     UserModule,
     AuthModule,
-    StarredModule
+    StarredModule,
+    LicenseModule
   ],
   providers: [
     {

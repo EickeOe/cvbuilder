@@ -22,13 +22,21 @@ export class UserResolver {
   }
 
   @ResolveField(() => [AppModel], { name: 'starredApps' })
-  async StarredApps(
+  async fetchStarredApps(
     @Parent() user: UserModel,
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
   ): Promise<AppModel[]> {
     const starredApps = await this.starredService.findAppsByUserAndType(user.id, 'app', pageInfo)
     starredApps.sort((a, b) => a.index - b.index)
     const apps = await Promise.all(starredApps.map((item) => this.appService.findOneByKey(item.starrableId)))
-    return apps
+    return apps.filter((app) => !!app)
+  }
+
+  @ResolveField(() => [AppModel], { name: 'apps' })
+  async fetchApps(
+    @Parent() user: UserModel,
+    @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
+  ): Promise<AppModel[]> {
+    return []
   }
 }

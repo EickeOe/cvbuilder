@@ -71,6 +71,11 @@ type PaginatedApp {
   totalCount: Int!
 }
 
+type PaginatedUser {
+  data: [user!]
+  totalCount: Int!
+}
+
 type Query {
   app(key: String!): app!
   apps(disabled: Boolean, key: String, pageInfo: pageInfo): PaginatedApp!
@@ -116,6 +121,7 @@ type app {
   key: ID!
   label: String!
   menuConfig: MenuConfig
+  owners(pageInfo: pageInfo): PaginatedUser!
   path: String!
 }
 
@@ -128,6 +134,7 @@ union starrable = app
 
 """user"""
 type user {
+  apps(pageInfo: pageInfo): [app!]!
   id: ID!
   name: String!
   starredApps(pageInfo: pageInfo): [app!]!
