@@ -42,6 +42,10 @@ export class AppService {
     return { ...app, ...input }
   }
 
+  async deleteApp(key: string) {
+    return this.repository.delete({ key })
+  }
+
   async fetchApps(inputParams: Partial<AppModel>, pageInfo: PageInfoModel) {
     const page = pageInfo2typeorm(pageInfo)
     const query: FindManyOptions<AppModel> = {}

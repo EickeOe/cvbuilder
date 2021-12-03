@@ -85,12 +85,19 @@ export const postAppApi = (app: MicroApp) =>
     }
   )
 
-export const deleteProductApi = (params: { code: string }) =>
-  http.post('/app/delete', params, {
-    headers: {
-      appCode: params.code
+export const deleteAppApi = (key: string) =>
+  gqlApi.request(
+    gql`
+      mutation deleteApp($key: String!) {
+        deleteApp(key: $key) {
+          key
+        }
+      }
+    `,
+    {
+      key
     }
-  })
+  )
 
 export const putAppApi = (app: MicroApp) =>
   gqlApi.request(

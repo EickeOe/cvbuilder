@@ -47,6 +47,7 @@ input MicroAppOptionsInput {
 type Mutation {
   addStar(appKey: String!): StarActionResult!
   createApp(app: NewAppInput!): app!
+  deleteApp(key: String!): app!
   login(input: LoginInput!): Token!
   removeStar(appKey: String!): StarActionResult!
   updateApp(app: UpdateAppInput!): app!

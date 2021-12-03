@@ -6,14 +6,13 @@ import XTableRender from '@/components/XTableRender/XTableRender'
 import { modal } from './Modal/Modal'
 import { useAsyncFn } from 'react-use'
 import { usePersistFn, useSearchParams } from '@gcer/react-air'
-import { deleteProductApi, fetchAppsApi, putAppApi } from 'developer/apis'
+import { deleteAppApi, fetchAppsApi, putAppApi } from 'developer/apis'
 import { Link } from 'react-router-dom'
-import { authModal } from './AuthModal/AuthModal'
 import Icon from '@/components/Icon/Icon'
 
 function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): void }) {
   const [{ loading }, del] = useAsyncFn(async () => {
-    await deleteProductApi({ code: data.key })
+    await deleteAppApi(data.key)
     onDel()
   }, [])
   return (

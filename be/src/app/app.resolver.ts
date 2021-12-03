@@ -62,4 +62,15 @@ export class AppResolver {
     }
     return app
   }
+
+  @Mutation((returns) => AppModel)
+  async deleteApp(@Args('key') key: string) {
+    const app = await this.appService.findOneByKey(key)
+    if (!app) {
+      throw new NotFoundException(key)
+    }
+    //TODO:  鉴权
+    await this.appService.deleteApp(key)
+    return app
+  }
 }
