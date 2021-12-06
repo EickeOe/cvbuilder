@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UserResolver } from './user.resolver'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -7,7 +7,7 @@ import { AppModule } from 'src/app/app.module'
 import { StarredModule } from 'src/starred/starred.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserModel]), AppModule, StarredModule],
+  imports: [TypeOrmModule.forFeature([UserModel]), forwardRef(() => AppModule), forwardRef(() => StarredModule)],
   providers: [UserService, UserResolver],
   exports: [UserService]
 })

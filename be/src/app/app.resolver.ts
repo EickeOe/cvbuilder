@@ -8,6 +8,7 @@ import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel, Paginated } from 'src/model/page-info.model'
 import { PaginatedUser } from 'src/user/dto/user-dto'
 import { UserModel } from 'src/user/user.model'
+import { UserService } from 'src/user/user.service'
 import { isLicenseMember, isLicenseOwner } from 'src/utils/isLicense'
 import { AppModel } from './app.model'
 import { AppService } from './app.service'
@@ -16,7 +17,11 @@ import { NewAppInput, UpdateAppInput } from './dto/new-app.input'
 
 @Resolver(() => AppModel)
 export class AppResolver {
-  constructor(private readonly appService: AppService, private readonly licenseService: LicenseService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly licenseService: LicenseService,
+    private readonly userService: UserService
+  ) {}
 
   @Query((returns) => AppModel, {
     name: 'app'
@@ -71,11 +76,17 @@ export class AppResolver {
   }
 
   @Mutation((returns) => AppModel)
-  async updateApp(@Args('app') input: UpdateAppInput) {
+  async updateApp(@CurrentUser() user: UserModel, @Args('app') input: UpdateAppInput) {
+    const license = await this.licenseService.findOne({ userId: user.id, licensableId: input.key })
+
+    if (!(isLicenseMember(license) || isLicenseOwner(license))) {
+      throw new ForbiddenException('无权限修改此应用！')
+    }
     const app = await this.appService.updateApp(input)
     if (!app) {
       throw new NotFoundException(app)
     }
+
     return app
   }
 
@@ -103,9 +114,14 @@ export class AppResolver {
     @Parent() app: AppModel,
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
   ): Promise<PaginatedUser> {
+    const [data, totalCount] = await this.licenseService.findAndCount(
+      { licensableId: app.key, licensableType: 'app' },
+      pageInfo
+    )
+    const userInfoList = await Promise.all(data.map((item) => this.userService.findOne(item.userId)))
     return {
-      data: [],
-      totalCount: 0
+      data: userInfoList,
+      totalCount
     }
   }
 }

@@ -25,7 +25,7 @@ export class LicenseService {
     const page = pageInfo2typeorm(pageInfo)
 
     return this.repository.findAndCount({
-      ...license,
+      where: { ...license },
       ...page
     })
   }
