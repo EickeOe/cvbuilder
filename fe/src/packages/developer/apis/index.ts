@@ -241,15 +241,23 @@ export const fetchRoleListApi = (appCode: string) =>
     }
   })
 
-export const fetchRoleUserListApi = (roleId: string, appCode: string) =>
-  http.get('/role/users', {
-    params: {
-      roleId
-    },
-    headers: {
-      appCode
-    }
-  })
+export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: number; size: number } }) =>
+  gqlApi.request(
+    gql`
+      query app($key: String!, $pageInfo: pageInfo) {
+        app(key: $key) {
+          owners(pageInfo: $pageInfo) {
+            data {
+              id
+              name
+            }
+            totalCount
+          }
+        }
+      }
+    `,
+    params
+  )
 
 export const postRole2UserApi = (params: { roleId: number; username: string }, appCode: string) =>
   http.post('/role/authorize', params, {

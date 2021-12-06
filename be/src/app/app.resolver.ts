@@ -6,7 +6,7 @@ import { CurrentUser } from 'src/decorator/current-user'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel, Paginated } from 'src/model/page-info.model'
-import { PaginatedUser } from 'src/user/dto/user-dto'
+import { PaginatedLicenseUser, PaginatedUser } from 'src/user/dto/user-dto'
 import { UserModel } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
 import { isLicenseMember, isLicenseOwner } from 'src/utils/isLicense'
@@ -70,7 +70,7 @@ export class AppResolver {
       throw new NotFoundException(app)
     }
     // 添加权限
-    await this.licenseService.addRole(user.id, app.key, 'app', LICENSE_ROLE.OWNER)
+    await this.licenseService.addLicense(user.id, app.key, 'app', LICENSE_ROLE.OWNER)
 
     return app
   }
@@ -109,16 +109,25 @@ export class AppResolver {
   // @Query(() => PaginatedApp)
   // appOwner(@Args('userId') userId: string | number) {}
 
-  @ResolveField(() => PaginatedUser, { name: 'owners' })
+  @ResolveField(() => PaginatedLicenseUser, { name: 'owners' })
   async fetchOwners(
     @Parent() app: AppModel,
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
-  ): Promise<PaginatedUser> {
+  ): Promise<PaginatedLicenseUser> {
     const [data, totalCount] = await this.licenseService.findAndCount(
       { licensableId: app.key, licensableType: 'app' },
       pageInfo
     )
-    const userInfoList = await Promise.all(data.map((item) => this.userService.findOne(item.userId)))
+    const userInfoList = await Promise.all(
+      data.map(async (item) => {
+        const user = await this.userService.findOne(item.userId)
+        return {
+          ...user,
+          role: item.role
+        }
+      })
+    )
+
     return {
       data: userInfoList,
       totalCount

@@ -12,7 +12,7 @@ export class StarredResolver {
   @Mutation(() => StarActionResult, {
     name: 'addStar'
   })
-  async addStar(@CurrentUser() user: UserModel, @Args('appKey') starrableId: string): Promise<StarActionResult> {
+  async addStar(@CurrentUser() user: UserModel, @Args('starrableId') starrableId: string): Promise<StarActionResult> {
     const app = await this.appService.findOneByKey(starrableId)
     if (app) {
       const starred = await this.starredService.findByUserAndStarrableId(user.id, starrableId)
@@ -28,7 +28,10 @@ export class StarredResolver {
   @Mutation(() => StarActionResult, {
     name: 'removeStar'
   })
-  async removeStar(@CurrentUser() user: UserModel, @Args('appKey') starrableId: string): Promise<StarActionResult> {
+  async removeStar(
+    @CurrentUser() user: UserModel,
+    @Args('starrableId') starrableId: string
+  ): Promise<StarActionResult> {
     const app = await this.appService.findOneByKey(starrableId)
     if (app) {
       const starred = await this.starredService.findByUserAndStarrableId(user.id, starrableId)

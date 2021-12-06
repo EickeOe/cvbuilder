@@ -13,12 +13,16 @@ export class LicenseService {
     private readonly repository: Repository<LicenseModel>
   ) {}
 
-  async addRole(userId: string, licensableId: string, licensableType: string, role: LICENSE_ROLE) {
+  async addLicense(userId: string, licensableId: string, licensableType: string, role: LICENSE_ROLE) {
     const license = await this.findOne({ userId, licensableId, licensableType })
     if (license) {
       return this.repository.save({ ...license, role })
     }
     this.repository.save({ userId, licensableId, licensableType, role })
+  }
+
+  async removeLicense(id: number) {
+    return this.repository.delete(id)
   }
 
   async findAndCount(license: Partial<LicenseModel>, pageInfo: PageInfoModel) {
@@ -32,11 +36,7 @@ export class LicenseService {
 
   async findOne(license: Partial<LicenseModel>) {
     return this.repository.findOne({
-      ...license
+      where: { ...license }
     })
-  }
-
-  async removeRole(userId: string, licensableId: string, licensableType: string, role: LICENSE_ROLE) {
-    return this.repository.delete({ userId, licensableId, licensableType, role })
   }
 }

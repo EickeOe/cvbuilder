@@ -17,6 +17,21 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
+enum LICENSE_ROLE {
+  MEMBER
+  OWNER
+}
+
+type LicenseActionResult {
+  licensable: licensable!
+}
+
+type LicenseUser implements User {
+  id: ID!
+  name: String!
+  role: LICENSE_ROLE!
+}
+
 input LoginInput {
   id: String!
   name: String!
@@ -45,11 +60,13 @@ input MicroAppOptionsInput {
 }
 
 type Mutation {
-  addStar(appKey: String!): StarActionResult!
+  addLicense(licensableId: String!, role: LICENSE_ROLE!, userId: String!): LicenseActionResult!
+  addStar(starrableId: String!): StarActionResult!
   createApp(app: NewAppInput!): app!
   deleteApp(key: String!): app!
   login(input: LoginInput!): Token!
-  removeStar(appKey: String!): StarActionResult!
+  removeLicense(licensableId: String!, userId: String!): LicenseActionResult!
+  removeStar(starrableId: String!): StarActionResult!
   updateApp(app: UpdateAppInput!): app!
   updateStar(type: String!, updateStarredList: [UpdateStarInput!]!): StarActionsResult!
 }
@@ -71,15 +88,15 @@ type PaginatedApp {
   totalCount: Int!
 }
 
-type PaginatedUser {
-  data: [user!]
+type PaginatedLicenseUser {
+  data: [LicenseUser!]
   totalCount: Int!
 }
 
 type Query {
   app(key: String!): app!
   apps(disabled: Boolean, key: String, pageInfo: pageInfo): PaginatedApp!
-  user: user!
+  user: User!
 }
 
 type StarActionResult {
@@ -111,6 +128,11 @@ input UpdateStarInput {
   starrableId: String!
 }
 
+interface User {
+  id: ID!
+  name: String!
+}
+
 """app"""
 type app {
   classification: String!
@@ -121,9 +143,11 @@ type app {
   key: ID!
   label: String!
   menuConfig: MenuConfig
-  owners(pageInfo: pageInfo): PaginatedUser!
+  owners(pageInfo: pageInfo): PaginatedLicenseUser!
   path: String!
 }
+
+union licensable = app
 
 input pageInfo {
   page: Float!

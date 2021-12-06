@@ -19,17 +19,25 @@ export default function AuthManage() {
     getCurrentList: () => []
   })
 
-  const { value: roleList = [] } = useAsync(() => {
-    const { key } = getSearchParams(location.search)
-    return fetchRoleListApi(key).then((list: any) =>
-      list.map((item: any) => ({ value: item.roleId, label: item.roleName }))
-    )
-  }, [])
+  // const { value: roleList = [] } = useAsync(() => {
+  //   const { key } = getSearchParams(location.search)
+  //   return fetchRoleListApi(key).then((list: any) =>
+  //     list.map((item: any) => ({ value: item.roleId, label: item.roleName }))
+  //   )
+  // }, [])
+  const roleList: any[] = []
   const api = useCallback(async (p) => {
     const { key } = getSearchParams(location.search)
-    return fetchRoleUserListApi(p.roleId, key).then((res: any) => {
+    return fetchRoleUserListApi({
+      key,
+      pageInfo: {
+        page: p.current,
+        size: p.pageSize
+      }
+    }).then((res: any) => {
       return {
-        list: res
+        list: res.app.owners.data,
+        total: res.app.owners.totalCount
       }
     })
   }, [])
@@ -82,7 +90,6 @@ export default function AuthManage() {
               </Button>
             </>
           }
-          noFirstFetch
           xFormRender={{
             form: {
               type: 'object',
