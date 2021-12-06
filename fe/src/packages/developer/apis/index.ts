@@ -250,6 +250,7 @@ export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: n
             data {
               id
               name
+              role
             }
             totalCount
           }

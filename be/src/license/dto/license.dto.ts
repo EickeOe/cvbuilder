@@ -8,16 +8,6 @@ export const Licensable = createUnionType({
   types: () => [AppModel]
 })
 
-@ObjectType({
-  implements: () => [UserModel]
-})
-export class LicenseUser implements UserModel {
-  id: string
-  name: string
-  @Field(() => LICENSE_ROLE)
-  role: LICENSE_ROLE
-}
-
 @ObjectType()
 export class LicenseActionResult {
   @Field(() => Licensable)

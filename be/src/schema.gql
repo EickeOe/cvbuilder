@@ -26,9 +26,7 @@ type LicenseActionResult {
   licensable: licensable!
 }
 
-type LicenseUser implements User {
-  id: ID!
-  name: String!
+interface LicenseUser {
   role: LICENSE_ROLE!
 }
 
@@ -88,8 +86,8 @@ type PaginatedApp {
   totalCount: Int!
 }
 
-type PaginatedLicenseUser {
-  data: [LicenseUser!]
+type PaginatedUser {
+  data: [User!]
   totalCount: Int!
 }
 
@@ -128,9 +126,13 @@ input UpdateStarInput {
   starrableId: String!
 }
 
-interface User {
+"""user"""
+type User implements LicenseUser {
+  apps(pageInfo: pageInfo): [app!]!
   id: ID!
   name: String!
+  role: LICENSE_ROLE!
+  starredApps(pageInfo: pageInfo): [app!]!
 }
 
 """app"""
@@ -143,7 +145,7 @@ type app {
   key: ID!
   label: String!
   menuConfig: MenuConfig
-  owners(pageInfo: pageInfo): PaginatedLicenseUser!
+  owners(pageInfo: pageInfo): PaginatedUser!
   path: String!
 }
 
@@ -155,11 +157,3 @@ input pageInfo {
 }
 
 union starrable = app
-
-"""user"""
-type user {
-  apps(pageInfo: pageInfo): [app!]!
-  id: ID!
-  name: String!
-  starredApps(pageInfo: pageInfo): [app!]!
-}

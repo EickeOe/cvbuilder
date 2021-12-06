@@ -1,6 +1,5 @@
-import { ObjectType } from '@nestjs/graphql'
+import { Field, InterfaceType, ObjectType } from '@nestjs/graphql'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
-import { LicenseUser } from 'src/license/dto/license.dto'
 import { Paginated } from 'src/model/page-info.model'
 import { UserModel } from '../user.model'
 
@@ -12,5 +11,8 @@ class UserLicense extends UserModel {
 @ObjectType()
 export class PaginatedUser extends Paginated(UserModel) {}
 
-@ObjectType()
-export class PaginatedLicenseUser extends Paginated(LicenseUser) {}
+@InterfaceType()
+export abstract class LicenseUser {
+  @Field(() => LICENSE_ROLE)
+  role: LICENSE_ROLE
+}

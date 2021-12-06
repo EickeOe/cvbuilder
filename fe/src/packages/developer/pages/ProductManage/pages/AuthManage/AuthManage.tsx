@@ -62,8 +62,8 @@ export default function AuthManage() {
 
     {
       title: '角色',
-      key: 'appId',
-      dataIndex: 'appId'
+      key: 'role',
+      dataIndex: 'role'
     }
   ])
 

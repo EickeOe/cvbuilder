@@ -6,7 +6,7 @@ import { CurrentUser } from 'src/decorator/current-user'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel, Paginated } from 'src/model/page-info.model'
-import { PaginatedLicenseUser, PaginatedUser } from 'src/user/dto/user-dto'
+import { PaginatedUser } from 'src/user/dto/user-dto'
 import { UserModel } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
 import { isLicenseMember, isLicenseOwner } from 'src/utils/isLicense'
@@ -109,11 +109,11 @@ export class AppResolver {
   // @Query(() => PaginatedApp)
   // appOwner(@Args('userId') userId: string | number) {}
 
-  @ResolveField(() => PaginatedLicenseUser, { name: 'owners' })
+  @ResolveField(() => PaginatedUser, { name: 'owners' })
   async fetchOwners(
     @Parent() app: AppModel,
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
-  ): Promise<PaginatedLicenseUser> {
+  ): Promise<PaginatedUser> {
     const [data, totalCount] = await this.licenseService.findAndCount(
       { licensableId: app.key, licensableType: 'app' },
       pageInfo
