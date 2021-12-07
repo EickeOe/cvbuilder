@@ -1,12 +1,12 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
+import { ForbiddenException, NotFoundException, PreconditionFailedException } from '@nestjs/common'
+import { Args, Int, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { AppService } from 'src/app/app.service'
 import { CurrentUser } from 'src/decorator/current-user'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { UserModel } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
 import { isLicenseOwner } from 'src/utils/isLicense'
-import { LicenseActionResult } from './dto/license.dto'
+import { Licensable, LicenseActionResult } from './dto/license.dto'
 import { LicenseModel } from './license.model'
 import { LicenseService } from './license.service'
 
@@ -47,10 +47,18 @@ export class LicenseResolver {
   })
   async removeLicense(
     @CurrentUser() user: UserModel,
-    @Args('licensableId') licensableId: string,
-    @Args('userId') userId: string
+    @Args('id', { nullable: true, type: () => Int }) id: number,
+    @Args('licensableId', { nullable: true }) licensableId: string,
+    @Args('userId', { nullable: true }) userId: string
   ): Promise<LicenseActionResult> {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId: licensableId })
+    let license = null
+    if (id) {
+      license = await this.licenseService.findOne({ id })
+    } else if (licensableId && userId) {
+      license = await this.licenseService.findOne({ userId: user.id, licensableId: licensableId })
+    } else {
+      throw new PreconditionFailedException('参数异常!')
+    }
 
     if (!isLicenseOwner(license)) {
       throw new ForbiddenException('无操作权限！')
@@ -68,5 +76,28 @@ export class LicenseResolver {
     return {
       licensable: app
     }
+  }
+
+  @ResolveField(() => Licensable, { name: 'licensable' })
+  async fetchLicense(@Parent() license: LicenseModel): Promise<typeof Licensable> {
+    if (license.licensableType === 'app') {
+      const app = this.appService.findOneByKey(license.licensableId)
+      if (!app) {
+        throw new NotFoundException()
+      }
+
+      return app
+    }
+    throw new NotFoundException()
+  }
+
+  @ResolveField(() => UserModel, { name: 'user' })
+  async fetchUser(@Parent() license: LicenseModel): Promise<UserModel> {
+    const user = this.userService.findOne(license.userId)
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    return user
   }
 }

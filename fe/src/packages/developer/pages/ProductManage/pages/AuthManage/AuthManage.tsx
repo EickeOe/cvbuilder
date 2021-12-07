@@ -35,9 +35,10 @@ export default function AuthManage() {
         size: p.pageSize
       }
     }).then((res: any) => {
+      console.log(res)
       return {
-        list: res.app.owners.data,
-        total: res.app.owners.totalCount
+        list: res.app.licences.data,
+        total: res.app.licences.totalCount
       }
     })
   }, [])
@@ -56,8 +57,10 @@ export default function AuthManage() {
   const columnsRef = useRef([
     {
       title: '姓名',
-      dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render(licence: any) {
+        return licence.user.name
+      }
     },
 
     {

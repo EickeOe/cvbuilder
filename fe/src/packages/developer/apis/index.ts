@@ -246,11 +246,14 @@ export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: n
     gql`
       query app($key: String!, $pageInfo: pageInfo) {
         app(key: $key) {
-          owners(pageInfo: $pageInfo) {
+          licences(pageInfo: $pageInfo, role: OWNER) {
             data {
               id
-              name
               role
+              user {
+                id
+                name
+              }
             }
             totalCount
           }
@@ -260,9 +263,33 @@ export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: n
     params
   )
 
-export const postRole2UserApi = (params: { roleId: number; username: string }, appCode: string) =>
-  http.post('/role/authorize', params, {
-    headers: {
-      appCode
-    }
-  })
+export const addLicenseApi = (params: { licensableId: string; userId: string }) =>
+  gqlApi.request(
+    gql`
+      mutation addLicense($licensableId: String!, $userId: String!) {
+        addLicense(licensableId: $licensableId, userId: $userId, role: OWNER) {
+          licensable {
+            ... on app {
+              key
+            }
+          }
+        }
+      }
+    `,
+    params
+  )
+export const removeLicenseApi = (params: { id: number; licensableId: string; userId: string }) =>
+  gqlApi.request(
+    gql`
+      mutation removeLicense($id: Int, $licensableId: String, $userId: String) {
+        removeLicense(id: $id, licensableId: $licensableId, userId: $userId) {
+          licensable {
+            ... on app {
+              key
+            }
+          }
+        }
+      }
+    `,
+    params
+  )

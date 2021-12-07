@@ -1,84 +1,89 @@
-import UserSelect from "@/components/UserSelect/UserSelect";
-import XFormRender from "@/components/NXFormRender/XFormRender";
-import { fetchRoleListApi, postRole2UserApi } from "@/packages/developer/apis";
-import { createFuncModal, getSearchParams } from "@gcer/react-air";
-import { Button, Drawer, Form, Modal as AModal, notification } from "antd";
-import { useEffect, useMemo, useRef } from "react";
-import { useAsync, useAsyncFn } from "react-use";
+import UserSelect from '@/components/UserSelect/UserSelect'
+import XFormRender from '@/components/NXFormRender/XFormRender'
+import { addLicenseApi } from '@/packages/developer/apis'
+import { createFuncModal, getSearchParams } from '@gcer/react-air'
+import { Button, Drawer, Form, Modal as AModal, notification } from 'antd'
+import { useEffect, useMemo, useRef } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 
 interface Props {
-  visible: boolean;
-  close: any;
-  onOk: any;
-  data: any;
+  visible: boolean
+  close: any
+  onOk: any
+  data: any
 }
 export default function Modal({ visible, close, onOk, data }: Partial<Props>) {
-  const { isNew } = data ?? {};
-  const formRef = useRef<any>();
+  const { isNew } = data ?? {}
+  const formRef = useRef<any>()
 
-  useEffect(() => {}, [visible]);
+  useEffect(() => {}, [visible])
 
-  const { value: roleList = [] } = useAsync(() => {
-    const { key } = getSearchParams(location.search);
-    return fetchRoleListApi(key).then((list: any) =>
-      list.map((item: any) => ({ value: item.roleId, label: item.roleName }))
-    );
-  }, []);
+  const { value: roleList = [] } = useAsync(async () => {
+    // const { key } = getSearchParams(location.search);
+
+    // return fetchRoleListApi(key).then((list: any) =>
+    //   list.map((item: any) => ({ value: item.roleId, label: item.roleName }))
+    // );
+    return ['owner', 'member'].map((item: any) => ({ value: item, label: item }))
+  }, [])
   const options = useMemo(
     () => ({
-      type: "object",
+      type: 'object',
       column: 1,
       labelLayout: {
-        type: "horizontal",
-        width: "100px",
+        type: 'horizontal',
+        width: '100px'
       },
       properties: [
         {
-          key: "userName",
-          widget: "UserSelect",
-          label: "用户",
+          key: 'userName',
+          widget: 'UserSelect',
+          label: '用户',
           rules: [
             {
-              required: true,
-            },
+              required: true
+            }
           ],
           widgetProps: {
-            mode: null,
-          },
+            mode: null
+          }
         },
         {
-          key: "roleId",
-          widget: "select",
-          label: "角色",
+          key: 'roleId',
+          widget: 'select',
+          label: '角色',
           options: roleList,
           rules: [
             {
-              required: true,
-            },
+              required: true
+            }
           ],
           widgetProps: {
             style: {
-              width: "100%",
-            },
-          },
-        },
-      ],
+              width: '100%'
+            }
+          }
+        }
+      ]
     }),
     [visible, roleList]
-  );
-  const title = isNew ? "新建" : "编辑";
+  )
+  const title = isNew ? '新建' : '编辑'
 
   const [{ loading }, ok] = useAsyncFn(async () => {
-    const values = await formRef.current.validate();
-    values.userName = values.userName.value;
-    const query = getSearchParams(location.search);
-    await postRole2UserApi(values, query.key);
-    onOk?.();
-    close();
+    const { key } = getSearchParams(location.search)
+    const values = await formRef.current.validate()
+    values.userName = values.userName.value
+    await addLicenseApi({
+      userId: values.userId,
+      licensableId: key
+    })
+    onOk?.()
+    close()
     notification.success({
-      message: `${title}成功！`,
-    });
-  });
+      message: `${title}成功！`
+    })
+  })
   return (
     <Drawer
       width={800}
@@ -88,7 +93,7 @@ export default function Modal({ visible, close, onOk, data }: Partial<Props>) {
       footer={
         <div
           style={{
-            textAlign: "right",
+            textAlign: 'right'
           }}
         >
           <Button onClick={close} style={{ marginRight: 8 }}>
@@ -100,12 +105,8 @@ export default function Modal({ visible, close, onOk, data }: Partial<Props>) {
         </div>
       }
     >
-      <XFormRender
-        options={options as any}
-        ref={formRef}
-        widgets={{ UserSelect }}
-      />
+      <XFormRender options={options as any} ref={formRef} widgets={{ UserSelect }} />
     </Drawer>
-  );
+  )
 }
-export const modal = createFuncModal(Modal);
+export const modal = createFuncModal(Modal)

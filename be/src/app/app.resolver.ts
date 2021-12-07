@@ -4,6 +4,7 @@ import { PubSub } from 'graphql-subscriptions'
 import { developerKey } from 'src/constants'
 import { CurrentUser } from 'src/decorator/current-user'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
+import { PaginatedLicense } from 'src/license/dto/license.dto'
 import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel, Paginated } from 'src/model/page-info.model'
 import { PaginatedUser } from 'src/user/dto/user-dto'
@@ -109,27 +110,19 @@ export class AppResolver {
   // @Query(() => PaginatedApp)
   // appOwner(@Args('userId') userId: string | number) {}
 
-  @ResolveField(() => PaginatedUser, { name: 'owners' })
+  @ResolveField(() => PaginatedLicense, { name: 'licences' })
   async fetchOwners(
     @Parent() app: AppModel,
-    @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
-  ): Promise<PaginatedUser> {
+    @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel,
+    @Args({ name: 'role', nullable: true, type: () => LICENSE_ROLE }) role: LICENSE_ROLE
+  ): Promise<PaginatedLicense> {
     const [data, totalCount] = await this.licenseService.findAndCount(
-      { licensableId: app.key, licensableType: 'app' },
+      { licensableId: app.key, licensableType: 'app', role },
       pageInfo
-    )
-    const userInfoList = await Promise.all(
-      data.map(async (item) => {
-        const user = await this.userService.findOne(item.userId)
-        return {
-          ...user,
-          role: item.role
-        }
-      })
     )
 
     return {
-      data: userInfoList,
+      data,
       totalCount
     }
   }

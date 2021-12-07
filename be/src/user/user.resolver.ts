@@ -1,7 +1,10 @@
+import { NotFoundException } from '@nestjs/common'
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 import { AppModel } from 'src/app/app.model'
 import { AppService } from 'src/app/app.service'
 import { CurrentUser } from 'src/decorator/current-user'
+import { LicenseModel } from 'src/license/license.model'
+import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel } from 'src/model/page-info.model'
 import { StarredService } from 'src/starred/starred.service'
 import { UserModel } from './user.model'
@@ -12,7 +15,8 @@ export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly starredService: StarredService,
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private readonly licenseService: LicenseService
   ) {}
 
   @Query(() => UserModel, { name: 'user' })
@@ -38,5 +42,18 @@ export class UserResolver {
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
   ): Promise<AppModel[]> {
     return []
+  }
+
+  @ResolveField(() => LicenseModel, { name: 'license' })
+  async fetchLicense(
+    @Parent() user: UserModel,
+    @Args({ name: 'licensableId' }) licensableId: string
+  ): Promise<LicenseModel> {
+    const license = await this.licenseService.findOne({ userId: user.id, licensableId })
+
+    if (!license) {
+      throw new NotFoundException()
+    }
+    return license
   }
 }
