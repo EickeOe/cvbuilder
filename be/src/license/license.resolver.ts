@@ -47,7 +47,7 @@ export class LicenseResolver {
   })
   async removeLicense(
     @CurrentUser() user: UserModel,
-    @Args('id', { nullable: true, type: () => Int }) id: number,
+    @Args('id', { nullable: true }) id: string,
     @Args('licensableId', { nullable: true }) licensableId: string,
     @Args('userId', { nullable: true }) userId: string
   ): Promise<LicenseActionResult> {
@@ -63,11 +63,11 @@ export class LicenseResolver {
     if (!isLicenseOwner(license)) {
       throw new ForbiddenException('无操作权限！')
     }
-    const app = await this.appService.findOneByKey(licensableId)
+    const app = await this.appService.findOneByKey(license.licensableId)
     if (!app) {
       throw new NotFoundException('无此应用！')
     }
-    const nowLicense = await this.licenseService.findOne({ userId: userId, licensableId: licensableId })
+    const nowLicense = await this.licenseService.findOne({ userId: license.userId, licensableId: license.licensableId })
 
     if (nowLicense) {
       await this.licenseService.removeLicense(nowLicense.id)

@@ -7,7 +7,7 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 export class LicenseModel {
   @Field(() => ID)
   @PrimaryGeneratedColumn('identity')
-  id: number
+  id: string
 
   @Field()
   @Column('varchar')

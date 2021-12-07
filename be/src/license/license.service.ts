@@ -21,7 +21,7 @@ export class LicenseService {
     this.repository.save({ userId, licensableId, licensableType, role })
   }
 
-  async removeLicense(id: number) {
+  async removeLicense(id: string) {
     return this.repository.delete(id)
   }
 

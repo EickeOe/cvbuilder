@@ -278,10 +278,10 @@ export const addLicenseApi = (params: { licensableId: string; userId: string }) 
     `,
     params
   )
-export const removeLicenseApi = (params: { id: number; licensableId: string; userId: string }) =>
+export const removeLicenseApi = (params: { id: string; licensableId?: string; userId?: string }) =>
   gqlApi.request(
     gql`
-      mutation removeLicense($id: Int, $licensableId: String, $userId: String) {
+      mutation removeLicense($id: String, $licensableId: String, $userId: String) {
         removeLicense(id: $id, licensableId: $licensableId, userId: $userId) {
           licensable {
             ... on app {

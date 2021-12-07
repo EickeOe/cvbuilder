@@ -1,3 +1,5 @@
+import { gqlApi } from '@/apis/api'
+import { gql } from 'graphql-request'
 import http from './api'
 
 export const fetchProductListApi = (params: { pageNum: number; pageSize: number; appCode?: string }) =>
@@ -38,7 +40,22 @@ export const postTemplateApi = (params: { content: string; appCode: string; id?:
 
 export const postEnableTemplateApi = (params: { id: number }) => http.post('/template/enable', params)
 
-export const fetchUserListApi = (userName: string) => http.post<any, any>('/user/list', { userName })
+export const fetchUserListApi = (name: string) =>
+  gqlApi.request(
+    gql`
+      query users($name: String) {
+        users(name: $name) {
+          data {
+            id
+            name
+          }
+        }
+      }
+    `,
+    {
+      name
+    }
+  )
 
 export const postRosterApi = (params: {
   appCode: string

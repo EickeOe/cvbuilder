@@ -13,8 +13,8 @@ export default function UserSelect({
   onChange(value: string[]): void
 }) {
   const [{ value: options = [], loading }, onSearch] = useAsyncFn(async (value: string) => {
-    return fetchUserListApi(value).then((res: any[]) => {
-      return res.map((user) => ({ label: user.realName, value: user.userName }))
+    return fetchUserListApi(value).then((res: any) => {
+      return res.users.data.map((user: any) => ({ label: user.name, value: user.id }))
     })
   }, [])
 

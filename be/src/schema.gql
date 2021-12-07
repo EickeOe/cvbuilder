@@ -69,7 +69,7 @@ type Mutation {
   createApp(app: NewAppInput!): app!
   deleteApp(key: String!): app!
   login(input: LoginInput!): Token!
-  removeLicense(id: Int, licensableId: String, userId: String): LicenseActionResult!
+  removeLicense(id: String, licensableId: String, userId: String): LicenseActionResult!
   removeStar(starrableId: String!): StarActionResult!
   updateApp(app: UpdateAppInput!): app!
   updateStar(type: String!, updateStarredList: [UpdateStarInput!]!): StarActionsResult!
@@ -97,10 +97,16 @@ type PaginatedLicense {
   totalCount: Int!
 }
 
+type PaginatedUser {
+  data: [User!]
+  totalCount: Int!
+}
+
 type Query {
   app(key: String!): app!
   apps(disabled: Boolean, key: String, pageInfo: pageInfo): PaginatedApp!
   user: User!
+  users(name: String, pageInfo: pageInfo): PaginatedUser!
 }
 
 type StarActionResult {

@@ -5,9 +5,31 @@ import XTableRender from '@/components/XTableRender/XTableRender'
 import { useAsync, useAsyncFn } from 'react-use'
 import { getSearchParams, usePersistFn } from '@gcer/react-air'
 import { modal } from './Modal/Modal'
-import { fetchRoleListApi, fetchRoleUserListApi } from 'developer/apis'
+import { fetchRoleListApi, fetchRoleUserListApi, removeLicenseApi } from 'developer/apis'
 import { useRecoilValue } from 'recoil'
 import { currentManageProductState } from '@/packages/developer/recoil'
+
+function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): void }) {
+  const [{ loading }, del] = useAsyncFn(async () => {
+    const query = getSearchParams(location.search)
+    await removeLicenseApi({
+      id: data.id
+    })
+    onDel()
+  }, [])
+  return (
+    <>
+      {/* <Button type="link" onClick={onEdit}>
+        编辑
+      </Button> */}
+      <Popconfirm title="确认删除?" onConfirm={del} okText="确定" cancelText="取消">
+        <Button loading={loading} type="link">
+          删除
+        </Button>
+      </Popconfirm>
+    </>
+  )
+}
 
 export default function AuthManage() {
   const currentManageProduct = useRecoilValue(currentManageProductState)
@@ -67,6 +89,31 @@ export default function AuthManage() {
       title: '角色',
       key: 'role',
       dataIndex: 'role'
+    },
+    {
+      title: '操作',
+      width: 200,
+      key: 'action',
+      render(licence: any) {
+        return (
+          <Action
+            data={licence}
+            onDel={() => {
+              const list = xTableRef.current.getCurrentList()
+              if (list.length <= 1) {
+                xTableRef.current.refresh((p: any) => {
+                  const next = { ...p }
+                  next.current = next.current - 1
+                  return next
+                })
+              } else {
+                xTableRef.current.refresh()
+              }
+            }}
+            onEdit={onEdit.bind(null, licence)}
+          />
+        )
+      }
     }
   ])
 

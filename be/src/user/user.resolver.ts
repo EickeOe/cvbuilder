@@ -7,6 +7,7 @@ import { LicenseModel } from 'src/license/license.model'
 import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel } from 'src/model/page-info.model'
 import { StarredService } from 'src/starred/starred.service'
+import { PaginatedUser } from './dto/user-dto'
 import { UserModel } from './user.model'
 import { UserService } from './user.service'
 
@@ -23,6 +24,19 @@ export class UserResolver {
   user(@CurrentUser() user: UserModel) {
     // TODO: 查询用户数据
     return user
+  }
+
+  @Query(() => PaginatedUser, { name: 'users' })
+  async users(
+    @CurrentUser() user: UserModel,
+    @Args({ name: 'name', nullable: true }) name: string,
+    @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
+  ): Promise<PaginatedUser> {
+    // TODO: 查询用户数据
+    return {
+      data: [],
+      totalCount: 0
+    }
   }
 
   @ResolveField(() => [AppModel], { name: 'starredApps' })
