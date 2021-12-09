@@ -6,13 +6,15 @@ import { UserModel } from './user.model'
 import { AppModule } from 'src/app/app.module'
 import { StarredModule } from 'src/starred/starred.module'
 import { LicenseModule } from 'src/license/license.module'
+import { VisitRecordModule } from 'src/visit-record/visit-record.module'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserModel]),
     forwardRef(() => AppModule),
     forwardRef(() => StarredModule),
-    forwardRef(() => LicenseModule)
+    forwardRef(() => LicenseModule),
+    forwardRef(() => VisitRecordModule)
   ],
   providers: [UserService, UserResolver],
   exports: [UserService]

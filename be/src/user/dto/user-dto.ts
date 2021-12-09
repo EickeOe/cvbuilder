@@ -10,9 +10,3 @@ class UserLicense extends UserModel {
 
 @ObjectType()
 export class PaginatedUser extends Paginated(UserModel) {}
-
-@InterfaceType()
-export abstract class LicenseUser {
-  @Field(() => LICENSE_ROLE)
-  role: LICENSE_ROLE
-}

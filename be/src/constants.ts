@@ -3,3 +3,5 @@ export const jwtConstants = {
 }
 
 export const developerKey = 'developer'
+
+export const visitRecordMaxCount = 6

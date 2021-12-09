@@ -14,6 +14,8 @@ import { StarredModel } from './starred/starred.model'
 import { StarredModule } from './starred/starred.module'
 import { LicenseModule } from './license/license.module'
 import { LicenseModel } from './license/license.model'
+import { VisitRecordModule } from './visit-record/visit-record.module'
+import { VisitRecordModel } from './visit-record/visit-record.model'
 @Module({
   imports: [
     AModule,
@@ -25,7 +27,7 @@ import { LicenseModel } from './license/license.model'
       password: 'eick',
       database: 'cvb',
       logging: true,
-      entities: [AppModel, UserModel, StarredModel, LicenseModel],
+      entities: [AppModel, UserModel, StarredModel, LicenseModel, VisitRecordModel],
       synchronize: true
     }),
     GraphQLModule.forRoot({
@@ -35,7 +37,8 @@ import { LicenseModel } from './license/license.model'
     UserModule,
     AuthModule,
     StarredModule,
-    LicenseModule
+    LicenseModule,
+    VisitRecordModule
   ],
   providers: [
     {

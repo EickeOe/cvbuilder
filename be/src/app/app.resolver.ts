@@ -3,6 +3,7 @@ import { Args, Field, Mutation, ObjectType, Parent, Query, ResolveField, Resolve
 import { PubSub } from 'graphql-subscriptions'
 import { developerKey } from 'src/constants'
 import { CurrentUser } from 'src/decorator/current-user'
+import { ENTITY_TYPE } from 'src/enums/enums'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { PaginatedLicense } from 'src/license/dto/license.dto'
 import { LicenseService } from 'src/license/license.service'
@@ -71,7 +72,7 @@ export class AppResolver {
       throw new NotFoundException(app)
     }
     // 添加权限
-    await this.licenseService.addLicense(user.id, app.key, 'app', LICENSE_ROLE.OWNER)
+    await this.licenseService.addLicense(user.id, app.key, ENTITY_TYPE.APP, LICENSE_ROLE.OWNER)
 
     return app
   }
@@ -116,10 +117,15 @@ export class AppResolver {
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel,
     @Args({ name: 'role', nullable: true, type: () => LICENSE_ROLE }) role: LICENSE_ROLE
   ): Promise<PaginatedLicense> {
-    const [data, totalCount] = await this.licenseService.findAndCount(
-      { licensableId: app.key, licensableType: 'app', role },
-      pageInfo
-    )
+    const model = {
+      licensableId: app.key,
+      licensableType: ENTITY_TYPE.APP
+    }
+    if (role) {
+      Object.assign(model, { role })
+    }
+
+    const [data, totalCount] = await this.licenseService.findAndCount(model, pageInfo)
 
     return {
       data,

@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AppService } from 'src/app/app.service'
 import { CurrentUser } from 'src/decorator/current-user'
+import { ENTITY_TYPE } from 'src/enums/enums'
 import { UserModel } from 'src/user/user.model'
 import { StarActionResult, StarActionsResult, UpdateStarInput } from './dto/dto'
 import { StarredService } from './starred.service'
@@ -17,7 +18,7 @@ export class StarredResolver {
     if (app) {
       const starred = await this.starredService.findByUserAndStarrableId(user.id, starrableId)
       if (!starred) {
-        await this.starredService.addStar(user.id, starrableId, 'app')
+        await this.starredService.addStar(user.id, starrableId, ENTITY_TYPE.APP)
       }
       return {
         starrable: app

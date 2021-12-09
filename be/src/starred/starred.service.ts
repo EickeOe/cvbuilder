@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AppModel } from 'src/app/app.model'
+import { ENTITY_TYPE } from 'src/enums/enums'
 import { PageInfoModel } from 'src/model/page-info.model'
 import { pageInfo2typeorm } from 'src/utils/page-info2typeorm'
 import { Repository } from 'typeorm'
@@ -20,7 +21,7 @@ export class StarredService {
   remove(a: any) {
     this.repository.remove(a)
   }
-  async addStar(userId: string, starrableId: string, type: string) {
+  async addStar(userId: string, starrableId: string, type: ENTITY_TYPE) {
     const starred = this.repository.create({
       starrableId,
       userId,

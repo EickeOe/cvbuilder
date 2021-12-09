@@ -2,6 +2,7 @@ import { ForbiddenException, NotFoundException, PreconditionFailedException } fr
 import { Args, Int, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { AppService } from 'src/app/app.service'
 import { CurrentUser } from 'src/decorator/current-user'
+import { ENTITY_TYPE } from 'src/enums/enums'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { UserModel } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
@@ -36,7 +37,7 @@ export class LicenseResolver {
     if (!app) {
       throw new NotFoundException('无此应用！')
     }
-    await this.licenseService.addLicense(userId, licensableId, 'app', role)
+    await this.licenseService.addLicense(userId, licensableId, ENTITY_TYPE.APP, role)
     return {
       licensable: app
     }

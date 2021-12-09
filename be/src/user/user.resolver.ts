@@ -2,11 +2,15 @@ import { NotFoundException } from '@nestjs/common'
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 import { AppModel } from 'src/app/app.model'
 import { AppService } from 'src/app/app.service'
+import { PaginatedApp } from 'src/app/dto/apps-result'
 import { CurrentUser } from 'src/decorator/current-user'
+import { ENTITY_TYPE } from 'src/enums/enums'
 import { LicenseModel } from 'src/license/license.model'
 import { LicenseService } from 'src/license/license.service'
 import { PageInfoModel } from 'src/model/page-info.model'
 import { StarredService } from 'src/starred/starred.service'
+import { PaginatedVisitRecord } from 'src/visit-record/dto/visit-record.dto'
+import { VisitRecordService } from 'src/visit-record/visit-record.service'
 import { PaginatedUser } from './dto/user-dto'
 import { UserModel } from './user.model'
 import { UserService } from './user.service'
@@ -17,7 +21,8 @@ export class UserResolver {
     private readonly userService: UserService,
     private readonly starredService: StarredService,
     private readonly appService: AppService,
-    private readonly licenseService: LicenseService
+    private readonly licenseService: LicenseService,
+    private readonly visitRecordService: VisitRecordService
   ) {}
 
   @Query(() => UserModel, { name: 'user' })
@@ -34,8 +39,13 @@ export class UserResolver {
   ): Promise<PaginatedUser> {
     // TODO: 查询用户数据
     return {
-      data: [],
-      totalCount: 0
+      data: [
+        {
+          id: '1',
+          name: '1'
+        }
+      ],
+      totalCount: 2
     }
   }
 
@@ -56,6 +66,25 @@ export class UserResolver {
     @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
   ): Promise<AppModel[]> {
     return []
+  }
+
+  @ResolveField(() => PaginatedVisitRecord, { name: 'visitRecords' })
+  async visitRecords(
+    @Parent() user: UserModel,
+    @Args({ name: 'visitableType', nullable: true, type: () => ENTITY_TYPE }) visitableType: ENTITY_TYPE,
+    @Args({ name: 'pageInfo', nullable: true }) pageInfo: PageInfoModel
+  ): Promise<PaginatedVisitRecord> {
+    const model = {
+      userId: user.id
+    }
+    if (visitableType) {
+      Object.assign(model, { visitableType })
+    }
+    const [data, totalCount] = await this.visitRecordService.findAndCount(model, pageInfo)
+    return {
+      data,
+      totalCount
+    }
   }
 
   @ResolveField(() => LicenseModel, { name: 'license' })
