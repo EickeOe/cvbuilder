@@ -26,7 +26,6 @@ export default function MenusDrawer({ visible, close }: Props) {
     () => fetchRecentVisitApi().then((data) => data.user.visitRecords.data.map((item: any) => item.visitable)),
     [currentApp]
   )
-  console.log(recentList)
   // TODO: useAsync 支持set
 
   const [starredApps, setStarredApps] = useState<MicroApp[]>([])

@@ -74,9 +74,9 @@ export default function BasicHeader({}: Props) {
               </>
             )}
 
-            <span className={className.item} onClick={setWorkOrderVis.on}>
+            {/* <span className={className.item} onClick={setWorkOrderVis.on}>
               onCall
-            </span>
+            </span> */}
 
             <span className={className.item}>
               <QuestionCircleOutlined onClick={setVis.on} />

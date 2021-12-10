@@ -40,44 +40,44 @@ const routes = [
               title: '文档管理'
             }
           },
-          {
-            path: '/developer/app/noticeManage',
-            component: lazy(() => import('developer/pages/ProductManage/pages/NoticeManage/NoticeManage')),
-            meta: {
-              title: '公告管理'
-            }
-          },
-          {
-            path: '/developer/app/qaManage',
-            component: lazy(() => import('developer/pages/ProductManage/pages/QAManage/QAManage')),
-            meta: {
-              title: 'QA管理'
-            }
-          },
-          {
-            path: '/developer/app/workOrderManage',
-            meta: {
-              title: '工单管理'
-            },
-            children: [
-              {
-                path: '/developer/app/workOrderManage/tsManage',
-                component: lazy(() => import('developer/pages/ProductManage/pages/WorkOrderManage/TsManage/TsManage')),
-                meta: {
-                  title: '值班管理'
-                }
-              },
-              {
-                path: '/developer/app/workOrderManage/templateManage',
-                component: lazy(
-                  () => import('developer/pages/ProductManage/pages/WorkOrderManage/TemplateManage/TemplateManage')
-                ),
-                meta: {
-                  title: '模板管理'
-                }
-              }
-            ]
-          },
+          // {
+          //   path: '/developer/app/noticeManage',
+          //   component: lazy(() => import('developer/pages/ProductManage/pages/NoticeManage/NoticeManage')),
+          //   meta: {
+          //     title: '公告管理'
+          //   }
+          // },
+          // {
+          //   path: '/developer/app/qaManage',
+          //   component: lazy(() => import('developer/pages/ProductManage/pages/QAManage/QAManage')),
+          //   meta: {
+          //     title: 'QA管理'
+          //   }
+          // },
+          // {
+          //   path: '/developer/app/workOrderManage',
+          //   meta: {
+          //     title: '工单管理'
+          //   },
+          //   children: [
+          //     {
+          //       path: '/developer/app/workOrderManage/tsManage',
+          //       component: lazy(() => import('developer/pages/ProductManage/pages/WorkOrderManage/TsManage/TsManage')),
+          //       meta: {
+          //         title: '值班管理'
+          //       }
+          //     },
+          //     {
+          //       path: '/developer/app/workOrderManage/templateManage',
+          //       component: lazy(
+          //         () => import('developer/pages/ProductManage/pages/WorkOrderManage/TemplateManage/TemplateManage')
+          //       ),
+          //       meta: {
+          //         title: '模板管理'
+          //       }
+          //     }
+          //   ]
+          // },
           {
             path: '/developer/app/authManage',
             component: lazy(() => import('developer/pages/ProductManage/pages/AuthManage/AuthManage')),

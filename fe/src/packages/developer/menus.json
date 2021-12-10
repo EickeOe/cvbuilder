@@ -1,0 +1,65 @@
+{
+  "children": [
+    {
+      "name": "产品管理",
+      "path": "/developer/appManage"
+    }
+  ],
+  "sub": [
+    {
+      "name": "产品详情",
+      "slotPath": "/developer/appManage",
+      "path": "/developer/app",
+      "redirect": "/developer/app/detail",
+      "icon": "AppstoreOutlined",
+      "children": [
+        {
+          "name": "详情",
+          "path": "/developer/app/detail",
+          "searchParams": ["key"]
+        },
+        {
+          "name": "菜单管理",
+          "path": "/developer/app/menuManage",
+          "searchParams": ["key"]
+        },
+        {
+          "name": "文档管理",
+          "path": "/developer/app/docManage",
+          "searchParams": ["key"]
+        },
+        {
+          "name": "公告管理",
+          "path": "/developer/app/noticeManage",
+          "searchParams": ["key"]
+        },
+        {
+          "name": "QA管理",
+          "path": "/developer/app/qaManage",
+          "searchParams": ["key"]
+        },
+        {
+          "name": "工单管理",
+          "path": "/developer/app/workOrderManage",
+          "children": [
+            {
+              "name": "值班管理",
+              "path": "/developer/app/workOrderManage/tsManage",
+              "searchParams": ["key"]
+            },
+            {
+              "name": "模板管理",
+              "path": "/developer/app/workOrderManage/templateManage",
+              "searchParams": ["key"]
+            }
+          ]
+        },
+        {
+          "name": "权限管理",
+          "path": "/developer/app/authManage",
+          "searchParams": ["key"]
+        }
+      ]
+    }
+  ]
+}

@@ -23,7 +23,6 @@ export default function Detail() {
 
   useEffect(() => {
     if (detail) {
-      console.log(detail)
       formRef.current.setFieldsValue(JSON.parse(JSON.stringify(detail)))
     }
   }, [detail])
