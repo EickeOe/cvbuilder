@@ -70,7 +70,7 @@ input MicroAppOptionsInput {
 type Mutation {
   addLicense(licensableId: String!, role: LICENSE_ROLE!, userId: String!): LicenseActionResult!
   addStar(starrableId: String!): StarActionResult!
-  addVisit(visitableId: String!): VisitRecordActionResult!
+  addVisitRecord(visitableId: String!): VisitRecordActionResult!
   createApp(app: NewAppInput!): app!
   deleteApp(key: String!): app!
   login(input: LoginInput!): Token!

@@ -1,4 +1,5 @@
 import useCurrentApp from '@/hooks/useCurrentApp'
+import useUpdateAppVisitRecord from '@/hooks/useUpdateAppVisitRecord'
 import { apiEnvState, envState } from '@/recoil'
 import { baseAppObservable, baseAppSubject } from '@/rx'
 import getDomain4Env from '@/utils/getDomain4Env'
@@ -8,7 +9,7 @@ import { useRecoilValue } from 'recoil'
 export default function GlobalData() {
   const env = useRecoilValue(envState)
   const currentProduct = useCurrentApp()
-
+  useUpdateAppVisitRecord()
   const apiEnv = useRecoilValue(apiEnvState)
   useEffect(() => {
     // ;(window as any).microApp = new EventCenterForMicroApp('kirn')

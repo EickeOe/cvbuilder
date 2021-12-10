@@ -14,9 +14,9 @@ import { VisitRecordService } from './visit-record.service'
 export class VisitRecordResolver {
   constructor(private readonly recentVisitService: VisitRecordService, private readonly appService: AppService) {}
   @Mutation(() => VisitRecordActionResult, {
-    name: 'addVisit'
+    name: 'addVisitRecord'
   })
-  async addVisit(@CurrentUser() user: UserModel, @Args('visitableId') visitableId: string) {
+  async addVisitRecord(@CurrentUser() user: UserModel, @Args('visitableId') visitableId: string) {
     const app = await this.appService.findOneByKey(visitableId)
     if (app) {
       const [recentVisitList, count] = await this.recentVisitService.findAndCount({ userId: user.id })
@@ -24,10 +24,10 @@ export class VisitRecordResolver {
       if (currentAppRecord) {
         await this.recentVisitService.save({ ...currentAppRecord, recordTime: Date.now() })
       } else {
-        if (count >= visitRecordMaxCount) {
-          const last = recentVisitList.pop()
-          await this.recentVisitService.remove(last.id)
-        }
+        // if (count >= visitRecordMaxCount) {
+        //   const last = recentVisitList.pop()
+        //   await this.recentVisitService.remove(last.id)
+        // }
 
         await this.recentVisitService.save({
           userId: user.id,

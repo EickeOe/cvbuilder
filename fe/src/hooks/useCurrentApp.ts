@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
 import { useRecoilValue } from 'recoil'
 
-export default function useCurrentApp() {
+export default function useCurrentApp(): MicroApp {
   const microAppList = useRecoilValue(microAppListState)
 
   const match = useRouteMatch<{

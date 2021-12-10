@@ -50,24 +50,58 @@ export const fetchAppsApi = (query: {
     .then((res: any) => res.apps.data)
 // TODO: 最近访问
 export const fetchRecentVisitApi = () =>
-  gqlApi
-    .request(
-      gql`
-        query {
-          apps {
+  gqlApi.request(
+    gql`
+      query {
+        user {
+          visitRecords(visitableType: APP, pageInfo: { size: 6, page: 1 }) {
             data {
-              key
-              label
-              path
-              classification
-              icon
+              recordTime
+              visitableType
+              visitable {
+                ... on app {
+                  key
+                  label
+                  path
+                  classification
+                  icon
+                  devOptions {
+                    microAppOptions {
+                      disableSandbox
+                      shadowDOM
+                      inline
+                    }
+                  }
+                  menuConfig {
+                    menus
+                    enabled
+                  }
+                }
+              }
             }
           }
         }
-      `
-    )
-    .then((res: any) => res.apps.data)
+      }
+    `
+  )
 
+export const updateAppVisitRecordApi = (visitableId: string) =>
+  gqlApi.request(
+    gql`
+      mutation addVisitRecord($visitableId: String!) {
+        addVisitRecord(visitableId: $visitableId) {
+          visitable {
+            ... on app {
+              key
+            }
+          }
+        }
+      }
+    `,
+    {
+      visitableId
+    }
+  )
 export const fetchStarredAppsApi = () =>
   gqlApi
     .request(

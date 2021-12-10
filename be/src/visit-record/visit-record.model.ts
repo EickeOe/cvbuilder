@@ -3,7 +3,7 @@ import { ENTITY_TYPE } from 'src/enums/enums'
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 
 @ObjectType('VisitRecord', { description: '最近访问' })
-@Entity({ name: 'recentVisit' })
+@Entity({ name: 'visitRecord' })
 export class VisitRecordModel {
   @Field((type) => ID)
   @PrimaryGeneratedColumn('identity')
