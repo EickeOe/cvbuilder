@@ -113,13 +113,6 @@ export const putAppApi = (app: MicroApp) =>
     }
   )
 
-export const fetchDocListApi = (params: { pageNum: number; pageSize: number; appCode?: string }) =>
-  http.post('/document/list', params, {
-    headers: {
-      appCode: params.appCode
-    }
-  })
-
 export const postDocApi = (params: { url: string; appCode: string; id?: number; name?: string }) =>
   http.post('/document/update', params, {
     headers: {

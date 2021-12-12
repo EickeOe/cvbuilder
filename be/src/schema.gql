@@ -4,8 +4,8 @@
 
 input CreateDocInput {
   content: String
-  directoryId: String!
   name: String!
+  parentId: String!
   url: String
 }
 
@@ -23,12 +23,12 @@ input DevOptionsInput {
 type Doc {
   content: String
   createdAt: Float!
-  createdUserId: Float!
-  directoryId: String!
+  createdUserId: String!
   id: ID!
   name: String!
+  parentId: String!
   updatedAt: Float!
-  updatedUserId: Float!
+  updatedUserId: String!
   url: String
 }
 
@@ -144,7 +144,7 @@ type Query {
   app(key: String!): app!
   apps(disabled: Boolean, key: String, pageInfo: pageInfo): PaginatedApp!
   doc(id: String!): Doc!
-  docs(directoryId: String, name: String, pageInfo: pageInfo): PaginatedDoc!
+  docs(name: String, pageInfo: pageInfo, parentId: String): PaginatedDoc!
   user: User!
   users(name: String, pageInfo: pageInfo): PaginatedUser!
 }
@@ -175,9 +175,9 @@ input UpdateAppInput {
 
 input UpdateDocInput {
   content: String
-  directoryId: String
   id: ID!
   name: String
+  parentId: String
   url: String
 }
 

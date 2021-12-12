@@ -1,65 +1,71 @@
-import XFormRender from "@/components/NXFormRender/XFormRender";
-import XDrawer from "@/components/XDrawer/Drawer";
-import { postDocApi } from "@/packages/developer/apis";
-import { createFuncModal, getSearchParams } from "@gcer/react-air";
-import { Button, notification } from "antd";
-import { useEffect, useMemo, useRef } from "react";
-import { useAsyncFn } from "react-use";
-import json from "./form.json";
-import styles from "./index.module.less";
+import XFormRender from '@/components/NXFormRender/XFormRender'
+import XDrawer from '@/components/XDrawer/Drawer'
+import { postDocApi } from '@/packages/developer/apis'
+import { createDocApi, updateDocApi } from '@/packages/developer/apis/doc'
+import { createFuncModal, getSearchParams } from '@gcer/react-air'
+import { Button, notification } from 'antd'
+import { useEffect, useMemo, useRef } from 'react'
+import { useAsyncFn } from 'react-use'
+import json from './form.json'
+import styles from './index.module.less'
 
 interface Props {
   data?: {
-    doc?: any;
-  };
-  visible: boolean;
-  onOk?(): void;
-  close(): void;
+    doc?: any
+  }
+  visible: boolean
+  onOk?(): void
+  close(): void
 }
 
 export default function Modal({ visible, data, close, onOk }: Props) {
-  const formRef = useRef<any>();
+  const formRef = useRef<any>()
 
   const isNew = useMemo(() => {
-    return !data?.doc;
-  }, [data]);
+    return !data?.doc
+  }, [data])
 
   const formJson = useMemo(() => {
-    return json;
-  }, [isNew]);
+    return json
+  }, [isNew])
 
   useEffect(() => {
     if (visible && data?.doc) {
-      const doc = data.doc;
-      formRef.current.setFieldsValue(doc);
+      const doc = data.doc
+      formRef.current.setFieldsValue(doc)
     }
-  }, [visible, data]);
+  }, [visible, data])
 
   const [{ loading }, ok] = useAsyncFn(async () => {
-    const { key } = getSearchParams();
-    const values = await formRef.current.validate();
+    const { key } = getSearchParams()
+    const values = await formRef.current.validate()
 
     const params = {
-      ...values,
+      name: values.name,
+      url: values.url,
       id: data?.doc?.id,
-      appCode: key,
-    };
+      parentId: key
+    }
 
-    await postDocApi(params);
+    if (isNew) {
+      await createDocApi(params)
+    } else {
+      await updateDocApi(params)
+    }
 
-    onOk?.();
-    close();
+    onOk?.()
+    close()
     notification.success({
-      message: `${isNew ? "新增" : "编辑"}文档成功！`,
-    });
-  }, [isNew, data]);
+      message: `${isNew ? '新增' : '编辑'}文档成功！`
+    })
+  }, [isNew, data])
   return (
     <XDrawer
       width={800}
       footer={
         <div
           style={{
-            textAlign: "right",
+            textAlign: 'right'
           }}
         >
           <Button onClick={close} style={{ marginRight: 8 }}>
@@ -70,7 +76,7 @@ export default function Modal({ visible, data, close, onOk }: Props) {
           </Button>
         </div>
       }
-      title={`${isNew ? "新增" : "编辑"}文档`}
+      title={`${isNew ? '新增' : '编辑'}文档`}
       placement="right"
       onClose={close}
       visible={visible}
@@ -79,6 +85,6 @@ export default function Modal({ visible, data, close, onOk }: Props) {
         <XFormRender ref={formRef} options={formJson as any} />
       </div>
     </XDrawer>
-  );
+  )
 }
-export const modal = createFuncModal(Modal);
+export const modal = createFuncModal(Modal)

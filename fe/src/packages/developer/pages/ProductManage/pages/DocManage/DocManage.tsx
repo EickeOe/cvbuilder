@@ -5,14 +5,13 @@ import XTableRender from '@/components/XTableRender/XTableRender'
 import { modal } from './Modal/Modal'
 import { useAsyncFn } from 'react-use'
 import { getSearchParams, usePersistFn } from '@gcer/react-air'
-import { deleteDocApi, fetchDocListApi } from 'developer/apis'
 import { useRecoilValue } from 'recoil'
 import { currentManageProductState } from '@/packages/developer/recoil'
+import { fetchDocsApi, deleteDocApi } from '@/packages/developer/apis/doc'
 
 function Action({ onEdit, onDel, data }: { data: any; onEdit(): void; onDel(): void }) {
   const [{ loading }, del] = useAsyncFn(async () => {
-    const query = getSearchParams(location.search)
-    await deleteDocApi(data.id, query.key)
+    await deleteDocApi(data.id)
     onDel()
   }, [])
   return (
@@ -41,15 +40,17 @@ export default function List() {
 
   const api = useCallback(async (p) => {
     const { key } = getSearchParams(location.search)
-    return fetchDocListApi({
-      ...p,
-      pageNum: p.current,
-      pageSize: p.pageSize,
-      appCode: key
+    return fetchDocsApi({
+      parentId: key,
+      name: p.name,
+      pageInfo: {
+        page: p.current,
+        size: p.pageSize
+      }
     }).then((res: any) => {
       return {
-        list: res.data,
-        total: res.total
+        list: res.docs.data,
+        total: res.docs.totalCount
       }
     })
   }, [])
@@ -143,11 +144,6 @@ export default function List() {
                     }
                   },
                   options: []
-                },
-                url: {
-                  label: 'URL',
-                  widget: 'input',
-                  placeholder: '请输入URL'
                 }
               }
             }

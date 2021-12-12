@@ -13,7 +13,7 @@ export class CreateDocInput {
   name: string
 
   @Field()
-  directoryId: string
+  parentId: string
 
   @Field({ nullable: true })
   content?: string
@@ -31,7 +31,7 @@ export class UpdateDocInput {
   name: string
 
   @Field({ nullable: true })
-  directoryId: string
+  parentId: string
 
   @Field({ nullable: true })
   content?: string

@@ -13,7 +13,7 @@ export class DocModel {
 
   @Field()
   @Column({ type: 'varchar', nullable: false })
-  directoryId: string
+  parentId: string
 
   @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
@@ -33,9 +33,9 @@ export class DocModel {
 
   @Field()
   @Column({ type: 'varchar' })
-  createdUserId: number
+  createdUserId: string
 
   @Field()
   @Column({ type: 'varchar' })
-  updatedUserId: number
+  updatedUserId: string
 }
