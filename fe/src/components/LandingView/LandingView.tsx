@@ -15,6 +15,7 @@ import { useRecoilValue } from 'recoil'
 
 import PinyinMatch from 'pinyin-match'
 import { fetchRecentVisitApi } from '@/apis/app'
+import { fetchDocsApi } from '@/apis/doc'
 
 interface quickMenusFace {
   id: string
@@ -33,8 +34,8 @@ export default function Landing() {
 
   // 快捷入口
   const fetchFastData = async () => {
-    const result: any = await fastMenus()
-    setQuickMenus(result)
+    // const result: any = await fastMenus()
+    // setQuickMenus(result)
   }
   useEffect(() => {
     fetchFastData()
@@ -42,7 +43,9 @@ export default function Landing() {
 
   // 最近访问
   const fetchRecentData = async () => {
-    const result: any = await fetchRecentVisitApi()
+    const result: any = await fetchRecentVisitApi().then((data) =>
+      data.user.visitRecords.data.map((item: any) => item.visitable)
+    )
     setRecentList(result)
   }
   useEffect(() => {
@@ -51,12 +54,8 @@ export default function Landing() {
 
   // 查询文档
   const fetchDocData = async () => {
-    const result: any = await queryDocList({
-      name: '',
-      pageNum: 1,
-      pageSize: 9999
-    })
-    setDocList(result.data)
+    const result: any = await fetchDocsApi()
+    setDocList(result.docs.data)
   }
   useEffect(() => {
     fetchDocData()
@@ -64,14 +63,14 @@ export default function Landing() {
 
   //  查询公告
   const fetchBulletinData = async () => {
-    const result: any = await queryBulletn({
-      name: '',
-      pageNum: 1,
-      status: 2,
-      appCode: '',
-      pageSize: 9999
-    })
-    setBulletinList(result.data)
+    // const result: any = await queryBulletn({
+    //   name: '',
+    //   pageNum: 1,
+    //   status: 2,
+    //   appCode: '',
+    //   pageSize: 9999
+    // })
+    // setBulletinList(result.data)
   }
   useEffect(() => {
     fetchBulletinData()

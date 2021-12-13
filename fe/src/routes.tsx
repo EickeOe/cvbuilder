@@ -7,12 +7,12 @@ export const ROUTES_MAPPING = {}
 const routes: any[] = [
   ...docsManageRoutes,
   ...developerRoutes,
-  ...controlRoutes
-  // {
-  //   path: '/',
-  //   component: lazy(() => import('@/pages/Home/Home')),
-  //   exact: true
-  // }
+  ...controlRoutes,
+  {
+    path: '/',
+    component: lazy(() => import('@/pages/Home/Home')),
+    exact: true
+  }
 ]
 
 export default routes

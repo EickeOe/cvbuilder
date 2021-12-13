@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 import http, { gqlApi } from './api'
 
-export const fetchDocstApi = () =>
+export const fetchDocsApi = () =>
   gqlApi.request(gql`
     query docs {
       docs {

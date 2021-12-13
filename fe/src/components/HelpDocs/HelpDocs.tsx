@@ -1,4 +1,4 @@
-import { fetchDocstApi, fetchQAListApi } from '@/apis/doc'
+import { fetchDocsApi, fetchQAListApi } from '@/apis/doc'
 import useCurrentApp from '@/hooks/useCurrentApp'
 import { microAppListState } from '@/recoil'
 import { DownOutlined, EditOutlined, FileTextOutlined } from '@ant-design/icons'
@@ -12,7 +12,7 @@ export default function HelpDocs() {
   const { value: docs = [] } = useAsync(
     (): Promise<any[]> =>
       Promise.all([
-        fetchDocstApi().then((res: any) => {
+        fetchDocsApi().then((res: any) => {
           const map = res.docs.data.reduce((pre: any, current: any) => {
             if (!pre[current.parentId]) {
               pre[current.parentId] = []
