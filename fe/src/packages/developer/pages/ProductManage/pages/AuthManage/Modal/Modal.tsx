@@ -5,6 +5,7 @@ import { createFuncModal, getSearchParams } from '@gcer/react-air'
 import { Button, Drawer, Form, Modal as AModal, notification } from 'antd'
 import { useEffect, useMemo, useRef } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
+import { ENTITY_TYPE } from '@/enums/enums'
 
 interface Props {
   visible: boolean
@@ -76,7 +77,8 @@ export default function Modal({ visible, close, onOk, data }: Partial<Props>) {
     values.userName = values.userName.value
     await addLicenseApi({
       userId: values.userId,
-      licensableId: key
+      licensableId: key,
+      licensableType: ENTITY_TYPE.APP
     })
     onOk?.()
     close()

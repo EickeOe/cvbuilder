@@ -44,4 +44,18 @@ export class DocService {
   async update(doc: Partial<DocModel>) {
     return this.repository.update({ id: doc.id }, doc)
   }
+
+  async findParentPath(id: string): Promise<DocModel[]> {
+    const result = []
+    const findParent = async (id: string) => {
+      const doc = await this.findById(id)
+      result.push(doc)
+      if (doc.parentId) {
+        findParent(doc.parentId)
+      }
+    }
+    await findParent(id)
+
+    return result
+  }
 }

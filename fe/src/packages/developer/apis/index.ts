@@ -1,3 +1,4 @@
+import { ENTITY_TYPE } from '@/enums/enums'
 import { gql } from 'graphql-request'
 import http, { gqlApi } from './api'
 
@@ -256,7 +257,7 @@ export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: n
     params
   )
 
-export const addLicenseApi = (params: { licensableId: string; userId: string }) =>
+export const addLicenseApi = (params: { licensableId: string; userId: string; licensableType: ENTITY_TYPE }) =>
   gqlApi.request(
     gql`
       mutation addLicense($licensableId: String!, $userId: String!) {
@@ -271,11 +272,11 @@ export const addLicenseApi = (params: { licensableId: string; userId: string }) 
     `,
     params
   )
-export const removeLicenseApi = (params: { id: string; licensableId?: string; userId?: string }) =>
+export const removeLicenseApi = (params: { id: string }) =>
   gqlApi.request(
     gql`
-      mutation removeLicense($id: String, $licensableId: String, $userId: String) {
-        removeLicense(id: $id, licensableId: $licensableId, userId: $userId) {
+      mutation removeLicense($id: String) {
+        removeLicense(id: $id) {
           licensable {
             ... on app {
               key

@@ -89,9 +89,10 @@ export class UserResolver {
   @ResolveField(() => LicenseModel, { name: 'license' })
   async fetchLicense(
     @Parent() user: UserModel,
-    @Args({ name: 'licensableId' }) licensableId: string
+    @Args({ name: 'licensableId' }) licensableId: string,
+    @Args('licensableType', { type: () => ENTITY_TYPE }) licensableType: ENTITY_TYPE
   ): Promise<LicenseModel> {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId })
+    const license = await this.licenseService.findOne({ userId: user.id, licensableId, licensableType })
 
     if (!license) {
       throw new NotFoundException()

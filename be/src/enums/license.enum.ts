@@ -1,8 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql'
 
 export enum LICENSE_ROLE {
-  MEMBER = 'member',
-  OWNER = 'owner'
+  COLLABORATOR = 'COLLABORATOR',
+  OWNER = 'OWNER'
 }
 registerEnumType(LICENSE_ROLE, {
   name: 'LICENSE_ROLE'

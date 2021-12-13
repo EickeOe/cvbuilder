@@ -2,6 +2,7 @@ import { ForbiddenException, NotFoundException, PreconditionFailedException } fr
 import { Args, Int, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { AppService } from 'src/app/app.service'
 import { CurrentUser } from 'src/decorator/current-user'
+import { DocService } from 'src/doc/doc.service'
 import { ENTITY_TYPE } from 'src/enums/enums'
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { UserModel } from 'src/user/user.model'
@@ -16,6 +17,7 @@ export class LicenseResolver {
   constructor(
     private readonly appService: AppService,
     private readonly licenseService: LicenseService,
+    private readonly docService: DocService,
     private readonly userService: UserService
   ) {}
 
@@ -26,20 +28,31 @@ export class LicenseResolver {
     @CurrentUser() user: UserModel,
     @Args('licensableId') licensableId: string,
     @Args('userId') userId: string,
+    @Args('licensableType', { type: () => ENTITY_TYPE }) licensableType: ENTITY_TYPE,
     @Args('role', { type: () => LICENSE_ROLE }) role: LICENSE_ROLE
   ): Promise<LicenseActionResult> {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId: licensableId })
+    const actorLicense = await this.licenseService.findLicense(user.id, licensableId, licensableType)
 
-    if (!isLicenseOwner(license)) {
+    if (!isLicenseOwner(actorLicense)) {
       throw new ForbiddenException('无操作权限！')
     }
-    const app = await this.appService.findOneByKey(licensableId)
-    if (!app) {
-      throw new NotFoundException('无此应用！')
+
+    let licensable = null
+
+    if (licensableType === ENTITY_TYPE.APP) {
+      licensable = await this.appService.findOneByKey(licensableId)
+    } else if (licensableType === ENTITY_TYPE.DOC) {
+      licensable = await this.docService.findById(licensableId)
     }
-    await this.licenseService.addLicense(userId, licensableId, ENTITY_TYPE.APP, role)
+
+    if (!licensable) {
+      throw new NotFoundException('无此licensable！')
+    }
+
+    await this.licenseService.addLicense(userId, licensableId, licensableType, role)
+
     return {
-      licensable: app
+      licensable
     }
   }
 
@@ -48,48 +61,49 @@ export class LicenseResolver {
   })
   async removeLicense(
     @CurrentUser() user: UserModel,
-    @Args('id', { nullable: true }) id: string,
-    @Args('licensableId', { nullable: true }) licensableId: string,
-    @Args('userId', { nullable: true }) userId: string
+    @Args('id', { nullable: true }) id: string
   ): Promise<LicenseActionResult> {
-    let license = null
-    if (id) {
-      license = await this.licenseService.findOne({ id })
-    } else if (licensableId && userId) {
-      license = await this.licenseService.findOne({ userId: user.id, licensableId: licensableId })
-    } else {
-      throw new PreconditionFailedException('参数异常!')
+    let license = await this.licenseService.findOne({ id })
+
+    if (!license) {
+      throw new NotFoundException('无此授权！')
     }
 
-    if (!isLicenseOwner(license)) {
+    const actorLicense = await this.licenseService.findLicense(user.id, license.id, license.licensableType)
+
+    if (!isLicenseOwner(actorLicense)) {
       throw new ForbiddenException('无操作权限！')
     }
-    const app = await this.appService.findOneByKey(license.licensableId)
-    if (!app) {
-      throw new NotFoundException('无此应用！')
-    }
-    const nowLicense = await this.licenseService.findOne({ userId: license.userId, licensableId: license.licensableId })
+    let licensable = null
 
-    if (nowLicense) {
-      await this.licenseService.removeLicense(nowLicense.id)
+    if (license.licensableType === ENTITY_TYPE.APP) {
+      licensable = await this.appService.findOneByKey(license.licensableId)
+    } else if (license.licensableType === ENTITY_TYPE.DOC) {
+      licensable = await this.docService.findById(license.licensableId)
     }
 
+    if (!licensable) {
+      throw new NotFoundException('无此licensable！')
+    }
+
+    await this.licenseService.removeLicense(license.id)
     return {
-      licensable: app
+      licensable
     }
   }
 
   @ResolveField(() => Licensable, { name: 'licensable' })
   async fetchLicense(@Parent() license: LicenseModel): Promise<typeof Licensable> {
-    if (license.licensableType === 'app') {
-      const app = this.appService.findOneByKey(license.licensableId)
-      if (!app) {
-        throw new NotFoundException()
-      }
-
-      return app
+    let licensable = null
+    if (license.licensableType === ENTITY_TYPE.APP) {
+      licensable = await this.appService.findOneByKey(license.licensableId)
+    } else if (license.licensableType === ENTITY_TYPE.DOC) {
+      licensable = await this.docService.findById(license.licensableId)
     }
-    throw new NotFoundException()
+    if (!licensable) {
+      throw new NotFoundException('无此licensable！')
+    }
+    return licensable
   }
 
   @ResolveField(() => UserModel, { name: 'user' })

@@ -34,6 +34,7 @@ type Doc {
 
 enum ENTITY_TYPE {
   APP
+  DOC
 }
 
 """
@@ -42,7 +43,7 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 enum LICENSE_ROLE {
-  MEMBER
+  COLLABORATOR
   OWNER
 }
 
@@ -88,7 +89,7 @@ input MicroAppOptionsInput {
 }
 
 type Mutation {
-  addLicense(licensableId: String!, role: LICENSE_ROLE!, userId: String!): LicenseActionResult!
+  addLicense(licensableId: String!, licensableType: ENTITY_TYPE!, role: LICENSE_ROLE!, userId: String!): LicenseActionResult!
   addStar(starrableId: String!): StarActionResult!
   addVisitRecord(visitableId: String!): VisitRecordActionResult!
   createApp(app: NewAppInput!): app!
@@ -96,7 +97,7 @@ type Mutation {
   deleteApp(key: String!): app!
   deleteDoc(id: String!): Doc!
   login(input: LoginInput!): Token!
-  removeLicense(id: String, licensableId: String, userId: String): LicenseActionResult!
+  removeLicense(id: String): LicenseActionResult!
   removeStar(starrableId: String!): StarActionResult!
   updateApp(app: UpdateAppInput!): app!
   updateDoc(input: UpdateDocInput!): Doc!
@@ -190,7 +191,7 @@ input UpdateStarInput {
 type User {
   apps(pageInfo: pageInfo): [app!]!
   id: ID!
-  license(licensableId: String!): License!
+  license(licensableId: String!, licensableType: ENTITY_TYPE!): License!
   name: String!
   starredApps(pageInfo: pageInfo): [app!]!
   visitRecords(pageInfo: pageInfo, visitableType: ENTITY_TYPE): PaginatedVisitRecord!
@@ -226,7 +227,7 @@ type app {
   path: String!
 }
 
-union licensable = app
+union licensable = Doc | app
 
 input pageInfo {
   page: Float!

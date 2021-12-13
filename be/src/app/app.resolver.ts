@@ -11,7 +11,7 @@ import { PageInfoModel, Paginated } from 'src/model/page-info.model'
 import { PaginatedUser } from 'src/user/dto/user-dto'
 import { UserModel } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
-import { isLicenseMember, isLicenseOwner } from 'src/utils/isLicense'
+import { isLicenseCollaborator, isLicenseOwner } from 'src/utils/isLicense'
 import { AppModel } from './app.model'
 import { AppService } from './app.service'
 import { PaginatedApp } from './dto/apps-result'
@@ -61,9 +61,13 @@ export class AppResolver {
 
   @Mutation((returns) => AppModel)
   async createApp(@CurrentUser() user: UserModel, @Args('app') input: NewAppInput) {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId: developerKey })
+    const license = await this.licenseService.findOne({
+      userId: user.id,
+      licensableId: developerKey,
+      licensableType: ENTITY_TYPE.APP
+    })
 
-    if (!(isLicenseMember(license) || isLicenseOwner(license))) {
+    if (!(isLicenseCollaborator(license) || isLicenseOwner(license))) {
       throw new ForbiddenException('无权限创建应用！')
     }
 
@@ -79,9 +83,13 @@ export class AppResolver {
 
   @Mutation((returns) => AppModel)
   async updateApp(@CurrentUser() user: UserModel, @Args('app') input: UpdateAppInput) {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId: input.key })
+    const license = await this.licenseService.findOne({
+      userId: user.id,
+      licensableId: input.key,
+      licensableType: ENTITY_TYPE.APP
+    })
 
-    if (!(isLicenseMember(license) || isLicenseOwner(license))) {
+    if (!(isLicenseCollaborator(license) || isLicenseOwner(license))) {
       throw new ForbiddenException('无权限修改此应用！')
     }
     const app = await this.appService.updateApp(input)
@@ -94,7 +102,11 @@ export class AppResolver {
 
   @Mutation((returns) => AppModel)
   async deleteApp(@CurrentUser() user: UserModel, @Args('key') key: string) {
-    const license = await this.licenseService.findOne({ userId: user.id, licensableId: key })
+    const license = await this.licenseService.findOne({
+      userId: user.id,
+      licensableId: key,
+      licensableType: ENTITY_TYPE.APP
+    })
 
     if (!isLicenseOwner(license)) {
       throw new ForbiddenException('无权限删除此应用！')

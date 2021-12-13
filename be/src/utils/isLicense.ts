@@ -1,8 +1,8 @@
 import { LICENSE_ROLE } from 'src/enums/license.enum'
 import { LicenseModel } from 'src/license/license.model'
 
-export const isLicenseMember = (license: LicenseModel) => {
-  if (license && license.role === LICENSE_ROLE.MEMBER) {
+export const isLicenseCollaborator = (license: LicenseModel) => {
+  if (license && license.role === LICENSE_ROLE.COLLABORATOR) {
     return true
   }
   return false
