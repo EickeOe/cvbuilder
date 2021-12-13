@@ -257,13 +257,20 @@ export const fetchRoleUserListApi = (params: { key: string; pageInfo?: { page: n
     params
   )
 
-export const addLicenseApi = (params: { licensableId: string; userId: string; licensableType: ENTITY_TYPE }) =>
+export const addLicenseApi = (params: { licensableId: string; userId: string }) =>
   gqlApi.request(
     gql`
       mutation addLicense($licensableId: String!, $userId: String!) {
-        addLicense(licensableId: $licensableId, userId: $userId, role: OWNER) {
+        addLicense(licensableId: $licensableId, userId: $userId, role: OWNER, licensableType: APP) {
           licensable {
             ... on app {
+              key
+            }
+          }
+        }
+        addLicense(licensableId: $licensableId, userId: $userId, role: OWNER, licensableType: DOC) {
+          licensable {
+            ... on doc {
               key
             }
           }
@@ -272,6 +279,8 @@ export const addLicenseApi = (params: { licensableId: string; userId: string; li
     `,
     params
   )
+
+// TODO: 删除文档权限
 export const removeLicenseApi = (params: { id: string }) =>
   gqlApi.request(
     gql`
