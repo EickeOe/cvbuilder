@@ -1,4 +1,4 @@
-import { fetchDocListApi, fetchQAListApi } from '@/apis/doc'
+import { fetchDocstApi, fetchQAListApi } from '@/apis/doc'
 import useCurrentApp from '@/hooks/useCurrentApp'
 import { microAppListState } from '@/recoil'
 import { DownOutlined, EditOutlined, FileTextOutlined } from '@ant-design/icons'
@@ -9,26 +9,19 @@ import { useRecoilValue } from 'recoil'
 import styles from './index.module.less'
 
 export default function HelpDocs() {
-  const { value: docList = [] } = useAsync(
-    (): Promise<{ name: string; url: string; key: string }[]> =>
+  const { value: docs = [] } = useAsync(
+    (): Promise<any[]> =>
       Promise.all([
-        fetchDocListApi({ pageNum: 1, pageSize: 99999 }).then((res: any) => {
-          return res.data.reduce((pre: any, current: any) => {
-            if (!pre[current.appCode]) {
-              pre[current.appCode] = []
+        fetchDocstApi().then((res: any) => {
+          const map = res.docs.data.reduce((pre: any, current: any) => {
+            if (!pre[current.parentId]) {
+              pre[current.parentId] = []
             }
-            pre[current.appCode].push(current)
+            pre[current.parentId].push(current)
             return pre
           }, {})
-        }),
-        fetchQAListApi({ pageNum: 1, pageSize: 99999 }).then((res: any) => {
-          return res.data.reduce((pre: any, current: any) => {
-            if (!pre[current.appCode]) {
-              pre[current.appCode] = []
-            }
-            pre[current.appCode].push(current)
-            return pre
-          }, {})
+
+          return map
         })
       ]),
     []
@@ -36,17 +29,15 @@ export default function HelpDocs() {
   const microAppList = useRecoilValue(microAppListState)
 
   const list = useMemo(() => {
-    if (docList.length === 2) {
+    if (docs.length) {
       return microAppList.map((product) => ({
         ...product,
-        docList: (docList[0] as any)[product.key] || [],
-        qaList: (docList[1] as any)[product.key] || []
+        docs: (docs[0] as any)[product.key] || []
       }))
     }
     return []
-  }, [docList, microAppList])
+  }, [docs, microAppList])
 
-  const currentAppPath = location.pathname.match(/^\/[^\/]*/g)?.[0]
   const currentProduct = useCurrentApp()
   return (
     <div className={styles.helpDocs}>
@@ -57,7 +48,7 @@ export default function HelpDocs() {
             <Collapse.Panel header={app.label} key={app.key}>
               <List
                 size="small"
-                dataSource={app.docList}
+                dataSource={app.docs}
                 renderItem={(item: any) => (
                   <List.Item>
                     <a
@@ -84,7 +75,7 @@ export default function HelpDocs() {
         )}
       </div>
 
-      <div>
+      {/* <div>
         <div className={styles.title}>常见问题 Q&A</div>
         <Collapse bordered={false}>
           {(currentProduct.key ? list.filter((app) => app.key === currentProduct.key) : list).map((app) => (
@@ -109,7 +100,7 @@ export default function HelpDocs() {
           <span>我要提问</span>
           <EditOutlined />
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
